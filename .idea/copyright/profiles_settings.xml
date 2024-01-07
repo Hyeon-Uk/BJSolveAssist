@@ -1,0 +1,7 @@
+<component name="CopyrightManager">
+  <settings default="IntellijPlugin">
+    <module2copyright>
+      <element module="All" copyright="IntellijPlugin" />
+    </module2copyright>
+  </settings>
+</component>

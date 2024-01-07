@@ -1,0 +1,97 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.example.pssupporter</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>BJSolveAssist</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="rlagusdnr120@gmail.com" url="https://github.com/Hyeon-Uk">Hyeonuk</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+<h1>This Plugin supports you to solve Baekjoon easier</h1>
+<h1>Notification!</h1>
+- Currently, it supports only `java` language.
+- It runs on your own computer environment. please install JDK on your device.
+- If your IDE version is not latest, UI might not update immediately. Please update your IDE version, set enable NEW UI, or resize our plugin tab.
+<hr>
+<h2>Requirements</h2>
+- jdk on your device
+<hr>
+<h2>Functions</h2>
+<ul>
+<li>Can add test-case</li>
+<li>Can remove test-case</li>
+<li>Can run all tests</li>
+<li>Can run one test</li>
+<li>Can stop all running tests</li>
+<li>Can assert results</li>
+<li>Can load sample data in baekjoon</li>
+<li>This time, only java can use</li>
+</ul>
+<hr>
+<h2>How to use</h2>
+<h3>Load test data</h3><br/>
+<img alt="load test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/169e9ab5-3a88-44ec-a763-2cd9b690d71e"/>
+<hr/>
+<h3>Add test case</h3><br/>
+<img alt="add test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/9bc188b0-f9f8-4749-811c-dc628239c7b2"/>
+<hr/>
+<h3>Remove test case</h3><br/>
+<img alt="remove test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/ace366a4-4d43-4b14-b15c-93a282f95954"/>
+<hr/>
+<h3>Run all tests</h3>
+<img alt="run all tests" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/a7cf0960-97cd-45ad-a599-13af0bdbf655"/>
+<hr/>
+<h3>Run test</h3>
+<img alt="run test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/fb6c9c55-2804-4c7f-96f1-cb6e0b21b544"/>
+<hr/>
+<h3>Run test with context menu</h3>
+<img alt="run with context menu" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/8670b1ac-5c85-4455-92eb-122b3a5ec4e2"/>
+<hr/>
+<h3>Stop all tests</h3>
+<img alt="stop all tests" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/f6af5a62-a2d5-4eaf-9ba6-6f31db9b5d0f"/>
+
+
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+
+        <toolWindow factoryClass="com.example.pssupporter.MyToolWindowFactory" id="BaekjoonSupporter"
+                    doNotActivateOnStart="true" anchor="bottom" icon="/icons/pluginIcon.svg" canCloseContents="true"/>
+    </extensions>
+    <actions>
+        <group id="myActionGroup">
+            <action id="myLoadTestDataAction" class="com.example.pssupporter.actions.MyLoadTestDataAction"
+                    text="Load test datas" description="Load test datas" icon="AllIcons.Actions.Find"/>
+            <action id="myAddTestAction" class="com.example.pssupporter.actions.MyAddTestAction"
+                    text="Add test data"
+                    description="Add test data" icon="AllIcons.General.Add"/>
+            <action id="myRemoveTestAction" class="com.example.pssupporter.actions.MyRemoveTestAction"
+                    text="Remove test data"
+                    description="Remove test data" icon="AllIcons.General.Remove"/>
+            <action id="myRunAllTestsAction" class="com.example.pssupporter.actions.MyRunAllTestsAction"
+                    text="Run All Tests"
+                    description="Run all tests" icon="AllIcons.Actions.RunAll">
+                <add-to-group group-id="ToolWindowContextMenu" anchor="first"/>
+                <add-to-group group-id="EditorPopupMenu.Run" anchor="first"/>
+            </action>
+            <action id="myRunTestAction" class="com.example.pssupporter.actions.MyRunTestAction"
+                    text="Run selected Test"
+                    description="Run selected test" icon="AllIcons.Actions.Execute"/>
+            <action id="myStopAllTestsAction" class="com.example.pssupporter.actions.MyStopAllTestsAction"
+                    text="Stop all running tests" description="Stop All Tests" icon="AllIcons.Actions.Suspend"/>
+        </group>
+    </actions>
+</idea-plugin>
