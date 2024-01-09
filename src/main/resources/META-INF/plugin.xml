@@ -16,9 +16,11 @@
     <description><![CDATA[
 <h1>This Plugin supports you to solve Baekjoon easier</h1>
 <h1>Notification!</h1>
-- Currently, it supports only `java` language.
-- It runs on your own computer environment. please install JDK on your device.
-- If your IDE version is not latest, UI might not update immediately. Please update your IDE version, set enable NEW UI, or resize our plugin tab.
+<ul>
+<li>Currently, it supports only `java` language.</li>
+<li>It runs on your own computer environment. please install JDK on your device.</li>
+<li>If your IDE version is not latest, UI might not update immediately. Please update your IDE version, set enable NEW UI, or resize our plugin tab.</li>
+</ul>
 <hr>
 <h2>Requirements</h2>
 - jdk on your device
@@ -34,30 +36,6 @@
 <li>Can load sample data in baekjoon</li>
 <li>This time, only java can use</li>
 </ul>
-<hr>
-<h2>How to use</h2>
-<h3>Load test data</h3><br/>
-<img alt="load test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/169e9ab5-3a88-44ec-a763-2cd9b690d71e"/>
-<hr/>
-<h3>Add test case</h3><br/>
-<img alt="add test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/9bc188b0-f9f8-4749-811c-dc628239c7b2"/>
-<hr/>
-<h3>Remove test case</h3><br/>
-<img alt="remove test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/ace366a4-4d43-4b14-b15c-93a282f95954"/>
-<hr/>
-<h3>Run all tests</h3>
-<img alt="run all tests" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/a7cf0960-97cd-45ad-a599-13af0bdbf655"/>
-<hr/>
-<h3>Run test</h3>
-<img alt="run test" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/fb6c9c55-2804-4c7f-96f1-cb6e0b21b544"/>
-<hr/>
-<h3>Run test with context menu</h3>
-<img alt="run with context menu" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/8670b1ac-5c85-4455-92eb-122b3a5ec4e2"/>
-<hr/>
-<h3>Stop all tests</h3>
-<img alt="stop all tests" src="https://github.com/Hyeon-Uk/BJSolveAssist/assets/43038815/f6af5a62-a2d5-4eaf-9ba6-6f31db9b5d0f"/>
-
-
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
