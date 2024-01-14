@@ -31,15 +31,22 @@ public class ComponentManager {
             .orElseThrow(() -> new IllegalArgumentException("Not exist component"));
   }
 
+  public <T extends JComponent> T getComponent(String componentName, Class<T> clazz) {
+    try {
+      return clazz.cast(Optional.ofNullable(ourComponentMap.get(componentName))
+              .orElseThrow(() -> new IllegalArgumentException("Not exist component")));
+    } catch (ClassCastException e) {
+      throw new IllegalArgumentException("Class Type Not Match");
+    }
+  }
+
   public void removeChildrenComponentsByName(String componentName) {
     JComponent component = getComponent(componentName);
     removeChildrenComponents(component);
   }
 
   public void removeChildrenComponents(@NotNull JComponent component) {
-    while (component.getComponentCount() != 0) {
-      component.remove(0);
-    }
+    component.removeAll();
     component.repaint();
   }
 }

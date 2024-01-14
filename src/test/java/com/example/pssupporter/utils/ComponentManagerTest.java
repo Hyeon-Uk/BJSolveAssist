@@ -67,6 +67,12 @@ class ComponentManagerTest {
   @Nested
   @DisplayName("[GetComponent]")
   class GetComponentTest {
+    private class MockComponent1 extends JComponent{
+
+    }
+    private class MockComponent2 extends JComponent{
+
+    }
     @Test
     @DisplayName("Success : Get Component correctly")
     void getComponent_Success() {
@@ -82,6 +88,28 @@ class ComponentManagerTest {
     @DisplayName("Fail : Throw error when component's name does not exist")
     void throwErrorWhenNameDoesNotExist_Failure() {
       assertThrows(IllegalArgumentException.class, () -> ComponentManager.getInstance().getComponent("notExistName"));
+    }
+
+    @Test
+    @DisplayName("Success : Get Component correctly with class parameter")
+    void getComponentWithClazzParam_Success() {
+      MockComponent1 mockComponent = new MockComponent1();
+      String name = "mockComponent";
+
+      ComponentManager.getInstance().addComponent(name, mockComponent);
+      MockComponent1 result = ComponentManager.getInstance().getComponent(name, MockComponent1.class);
+      assertEquals(mockComponent, result);
+      assertEquals(mockComponent.getClass(),result.getClass());
+    }
+
+    @Test
+    @DisplayName("Fail : Throw error when component's class does not match")
+    void throwErrorWhenClassDoesNotExist_Failure() {
+      MockComponent1 mockComponent = new MockComponent1();
+      String name = "mockComponent";
+
+      ComponentManager.getInstance().addComponent(name, mockComponent);
+      assertThrows(IllegalArgumentException.class, () -> ComponentManager.getInstance().getComponent(name,MockComponent2.class));
     }
   }
 
