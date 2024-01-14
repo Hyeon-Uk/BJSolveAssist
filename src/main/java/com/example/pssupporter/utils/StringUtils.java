@@ -15,6 +15,13 @@ public class StringUtils {
   private static final Pattern RTRIM = Pattern.compile("\\s+$");
   private static final String EMPTY_STRING = "";
 
+  public static String removeCarriageReturn(@NotNull String str) {
+    if (str == null) {
+      throw new IllegalArgumentException("Arguement must not be null");
+    }
+    return str.replaceAll("\r", "");
+  }
+
   public static String rTrim(@NotNull String str) {
     try {
       return RTRIM.matcher(str).replaceAll(EMPTY_STRING);

@@ -110,4 +110,25 @@ public class StringUtilsTest {
       assertFalse(StringUtils.isBlank(notBlankString));
     }
   }
+
+  @Nested
+  @DisplayName("[RemoveCarriageReturn]")
+  class removeCarriageReturnTest {
+    @Test
+    @DisplayName("Success : Remove all carriage return characters")
+    void removeAllCarriageReturnCharacters_Success() {
+      String str = "hello\r\nworld!\n";
+      String expected = "hello\nworld!\n";
+
+      assertEquals(expected, StringUtils.removeCarriageReturn(str));
+    }
+
+    @Test
+    @DisplayName("Fail : Throw error when string is null")
+    void throwsErrorWhenStringIsNull_Failure() {
+      assertThrows(IllegalArgumentException.class, () -> {
+        StringUtils.removeCarriageReturn(null);
+      });
+    }
+  }
 }
