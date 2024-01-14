@@ -19,7 +19,7 @@ public class MyTestListPanel extends JBList<MyTestListItem> {
   private DefaultListModel<MyTestListItem> myModel;
   private Project myProject;
 
-  public MyTestListPanel(Project project) {
+  protected MyTestListPanel(Project project) {
     this.myProject = project;
     myModel = new DefaultListModel<>();
     setCellRenderer(new MyCellRenderer());
