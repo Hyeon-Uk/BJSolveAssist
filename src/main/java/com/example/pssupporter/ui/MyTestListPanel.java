@@ -6,6 +6,7 @@ package com.example.pssupporter.ui;
 
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.vo.TestData;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
 
@@ -15,21 +16,18 @@ import java.util.List;
 
 public class MyTestListPanel extends JBList<MyTestListItem> {
 
-  private static final MyTestListPanel myTestListPanel = new MyTestListPanel();
   private DefaultListModel<MyTestListItem> myModel;
+  private Project myProject;
 
-  public static MyTestListPanel getInstance() {
-    return myTestListPanel;
-  }
-
-  private MyTestListPanel() {
+  public MyTestListPanel(Project project) {
+    this.myProject = project;
     myModel = new DefaultListModel<>();
     setCellRenderer(new MyCellRenderer());
 
     this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     addListSelectionListener((e) -> {
-      int selectedIndex = myTestListPanel.getSelectedIndex();
+      int selectedIndex = this.getSelectedIndex();
 
       if (selectedIndex == -1) {
         return;
@@ -48,11 +46,11 @@ public class MyTestListPanel extends JBList<MyTestListItem> {
   }
 
   public void addTest() {
-    myModel.addElement(new MyTestListItem(new MyEditorPanel()));
+    myModel.addElement(new MyTestListItem(new MyEditorPanel(this.myProject)));
   }
 
   public void addTest(TestData testData) {
-    myModel.addElement(new MyTestListItem(new MyEditorPanel(testData)));
+    myModel.addElement(new MyTestListItem(new MyEditorPanel(this.myProject, testData)));
   }
 
   public void removeTest(int index) {

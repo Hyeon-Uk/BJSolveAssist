@@ -36,8 +36,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       ContentFactory contentFactory = ContentFactory.getInstance();
 
       JBPanel myMainView = new JBPanel(new BorderLayout());
-
-      JBScrollPane scrollPane = new JBScrollPane(MyTestListPanel.getInstance());
+      MyTestListPanel myTestListPanel = new MyTestListPanel(project);
+      JBScrollPane scrollPane = new JBScrollPane(myTestListPanel);
 
       scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
       scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -50,7 +50,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       myMainView.add(scrollPane, BorderLayout.WEST);
       myMainView.add(myEditorPanel, BorderLayout.CENTER);
 
-      ComponentManager.getInstance().addComponent("myTestListPanel", MyTestListPanel.getInstance());
+      ComponentManager.getInstance().addComponent("myTestListPanel", myTestListPanel);
       ComponentManager.getInstance().addComponent("myEditorPanel", myEditorPanel);
 
       Content content = contentFactory.createContent(myMainView, "Supporter", false);

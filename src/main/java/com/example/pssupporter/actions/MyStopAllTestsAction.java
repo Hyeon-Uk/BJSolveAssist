@@ -5,6 +5,7 @@
 package com.example.pssupporter.actions;
 
 import com.example.pssupporter.ui.MyTestListPanel;
+import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -19,7 +20,8 @@ public class MyStopAllTestsAction extends AnAction {
             .hasRunningThreads(ThreadGroupName.TEST_RUNNING);
     e.getPresentation().setEnabled(isRunning);
 
-    MyTestListPanel.getInstance().setEnabled(!isRunning);
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    myTestListPanel.setEnabled(!isRunning);
   }
 
   @Override
