@@ -30,19 +30,21 @@ public class MyRunTestAction extends AnAction {
             .hasRunningThreads(ThreadGroupName.TEST_RUNNING);
     e.getPresentation().setEnabled(!isRunning);
 
-    MyTestListPanel.getInstance().setEnabled(!isRunning);
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    myTestListPanel.setEnabled(!isRunning);
   }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    int selectedIndex = MyTestListPanel.getInstance().getSelectedIndex();
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    int selectedIndex = myTestListPanel.getSelectedIndex();
     if (selectedIndex == -1) {
       return;
     }
     ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
-    MyTestListPanel.getInstance().clearSelection();
+    myTestListPanel.clearSelection();
 
-    MyTestListItem selectedItem = MyTestListPanel.getInstance().getMyTestListItem(selectedIndex);
+    MyTestListItem selectedItem = myTestListPanel.getMyTestListItem(selectedIndex);
     IntellijUtils.getSelectedFile(Objects.requireNonNull(e.getProject()))
             .ifPresentOrElse(selectedFile -> {
                       IntellijUtils.autoSaveFile(selectedFile);

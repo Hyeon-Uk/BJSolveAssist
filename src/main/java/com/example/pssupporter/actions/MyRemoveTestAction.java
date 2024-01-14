@@ -23,13 +23,13 @@ public class MyRemoveTestAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    MyTestListPanel instance = MyTestListPanel.getInstance();
-    int selectedIndex = instance.getSelectedIndex();
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    int selectedIndex = myTestListPanel.getSelectedIndex();
     if (selectedIndex != -1) {
       ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
 
-      instance.removeTest(selectedIndex);
-      instance.repaint();
+      myTestListPanel.removeTest(selectedIndex);
+      myTestListPanel.repaint();
     }
   }
 }

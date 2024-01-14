@@ -5,6 +5,7 @@
 package com.example.pssupporter.actions;
 
 import com.example.pssupporter.ui.MyTestListPanel;
+import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -22,7 +23,7 @@ public class MyAddTestAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    MyTestListPanel myTestListPanel = MyTestListPanel.getInstance();
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
     myTestListPanel.addTest();
   }
 }

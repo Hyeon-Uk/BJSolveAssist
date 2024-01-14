@@ -30,6 +30,7 @@ public class MyLoadTestDataAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
+    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
     String selected = Messages.showInputDialog(e.getProject(), "Input Baekjoon number", "Load Test Data", null);
     if (!StringUtils.isBlank(selected)) {
       ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
@@ -38,10 +39,10 @@ public class MyLoadTestDataAction extends AnAction {
         long number = Long.parseLong(selected);
         List<TestData> examples = CrawlerProvider.getCrawler(Site.BAEKJOON_OJ).getExamples(number);
 
-        MyTestListPanel.getInstance().removeAllTests();
+        myTestListPanel.removeAllTests();
 
         for (TestData testData : examples) {
-          MyTestListPanel.getInstance().addTest(testData);
+          myTestListPanel.addTest(testData);
         }
 
       } catch (NumberFormatException ne) {
