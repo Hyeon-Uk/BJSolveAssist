@@ -48,7 +48,7 @@
     <extensions defaultExtensionNs="com.intellij">
 
         <toolWindow factoryClass="com.example.pssupporter.MyToolWindowFactory" id="BaekjoonSupporter"
-                    doNotActivateOnStart="true" anchor="bottom" icon="/icons/pluginIcon.svg" canCloseContents="true"/>
+                    doNotActivateOnStart="true" anchor="bottom" icon="/icons/pluginIcon.svg" canCloseContents="false"/>
     </extensions>
     <actions>
         <group id="myActionGroup">
