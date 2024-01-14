@@ -32,7 +32,7 @@ public class CodeRunnerDTO {
     private String myOutput;
 
     public Response(String myOutput) {
-      this.myOutput = StringUtils.rTrim(myOutput);
+      this.myOutput = StringUtils.rTrim(StringUtils.removeCarriageReturn(myOutput));
     }
 
     public String getOutput() {
