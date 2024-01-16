@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.example"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
   mavenCentral()
@@ -17,7 +17,7 @@ intellij {
   version.set("2022.2.5")
   type.set("IC") // Target IDE Platform
 
-  plugins.set(listOf("com.intellij.java"))
+  plugins.set(listOf("com.intellij.java","org.jetbrains.plugins.terminal"))
 }
 
 dependencies{

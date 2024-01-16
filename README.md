@@ -1,7 +1,7 @@
 <h1>This Plugin supports you to solve Baekjoon easier</h1>
 <h1>Notification!</h1>
-- Currently, it supports only `java` language.
-- It runs on your own computer environment. please install JDK on your device.
+- Currently, it supports only `java` language.<br/>
+- It runs on your own computer environment. please install JDK on your device.<br/>
 - If your IDE version is not latest, UI might not update immediately. Please update your IDE version, set enable NEW UI, or resize our plugin tab.
 <hr>
 <h2>Requirements</h2>

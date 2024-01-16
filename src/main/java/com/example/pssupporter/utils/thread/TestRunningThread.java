@@ -5,7 +5,6 @@
 package com.example.pssupporter.utils.thread;
 
 import com.example.pssupporter.ui.MyTestListItem;
-import com.example.pssupporter.ui.MyTestListPanel;
 import com.example.pssupporter.utils.runner.CodeRunner;
 import com.example.pssupporter.utils.runner.dto.CodeRunnerDTO;
 import com.example.pssupporter.vo.TestData;
@@ -28,7 +27,6 @@ public class TestRunningThread extends Thread {
   public void run() {
     super.run();
     myTestListItem.setStatus(TestStatus.RUNNING);
-    MyTestListPanel.getInstance().repaint();
 
     String input = myTestData.getInput();
     String output = myTestData.getOutput();
@@ -43,13 +41,11 @@ public class TestRunningThread extends Thread {
     }
 
     myTestListItem.getMyEditorPanel().setResult(result);
-    MyTestListPanel.getInstance().repaint();
   }
 
   @Override
   public void interrupt() {
     myTestListItem.setStatus(TestStatus.STOP);
-    MyTestListPanel.getInstance().repaint();
     super.interrupt();
   }
 }

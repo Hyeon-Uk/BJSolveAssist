@@ -4,30 +4,22 @@
 
 package com.example.pssupporter;
 
-import com.example.pssupporter.ui.MyTestListPanel;
-import com.example.pssupporter.ui.MyToolbarPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
+import com.example.pssupporter.ui.MyMainView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBScrollPane;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class MyToolWindowFactory implements ToolWindowFactory {
-  private ActionGroup getActionGroup(String actionGroupId) {
-    ActionManager actionManager = ActionManager.getInstance();
-    return (ActionGroup) actionManager.getAction(actionGroupId);
-  }
+  private MyMainView myMainView;
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -35,27 +27,30 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       ContentManager contentManager = toolWindow.getContentManager();
       ContentFactory contentFactory = ContentFactory.getInstance();
 
-      JBPanel myMainView = new JBPanel(new BorderLayout());
-
-      JBScrollPane scrollPane = new JBScrollPane(MyTestListPanel.getInstance());
-
-      scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-      scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-      JBPanel myEditorPanel = new JBPanel(new GridLayout(1, 1));
-      ActionGroup myActionGroup = getActionGroup("myActionGroup");
-      MyToolbarPanel myToolbarPanel = new MyToolbarPanel(myActionGroup, myMainView);
-
-      myMainView.add(myToolbarPanel, BorderLayout.NORTH);
-      myMainView.add(scrollPane, BorderLayout.WEST);
-      myMainView.add(myEditorPanel, BorderLayout.CENTER);
-
-      ComponentManager.getInstance().addComponent("myTestListPanel", MyTestListPanel.getInstance());
-      ComponentManager.getInstance().addComponent("myEditorPanel", myEditorPanel);
+      myMainView = new MyMainView(project, toolWindow.getAnchor().isHorizontal());
 
       Content content = contentFactory.createContent(myMainView, "Supporter", false);
 
       contentManager.addContent(content);
+      setupToolWindowEventListener(project);
+    });
+  }
+
+  private void setupToolWindowEventListener(@NotNull Project project) {
+    MessageBusConnection connect = project.getMessageBus().connect();
+    connect.subscribe(ToolWindowManagerListener.TOPIC, new ToolWindowManagerListener() {
+      @Override
+      public void stateChanged(@NotNull ToolWindowManager toolWindowManager, @NotNull ToolWindowManagerEventType changeType) {
+        ToolWindowManagerListener.super.stateChanged(toolWindowManager, changeType);
+        if (ToolWindowManagerEventType.SetSideToolAndAnchor.equals(changeType)) {
+          ToolWindow baekjoonSupporter = toolWindowManager.getToolWindow("BaekjoonSupporter");
+
+          if (baekjoonSupporter.getAnchor() != null) {
+            ToolWindowAnchor anchor = baekjoonSupporter.getAnchor();
+            myMainView.setLayoutBasedOnOrientation(anchor.isHorizontal());
+          }
+        }
+      }
     });
   }
 }
