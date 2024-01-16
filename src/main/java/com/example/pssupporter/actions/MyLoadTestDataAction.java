@@ -12,6 +12,7 @@ import com.example.pssupporter.utils.crawling.vo.Site;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.example.pssupporter.vo.TestData;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.Messages;
@@ -30,24 +31,26 @@ public class MyLoadTestDataAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
-    String selected = Messages.showInputDialog(e.getProject(), "Input Baekjoon number", "Load Test Data", null);
-    if (!StringUtils.isBlank(selected)) {
-      ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
-
-      try {
-        long number = Long.parseLong(selected);
-        List<TestData> examples = CrawlerProvider.getCrawler(Site.BAEKJOON_OJ).getExamples(number);
-
-        myTestListPanel.removeAllTests();
-
-        for (TestData testData : examples) {
-          myTestListPanel.addTest(testData);
-        }
-
-      } catch (NumberFormatException ne) {
-        Messages.showMessageDialog(e.getProject(), "Input number!", "Load Test Error", null);
-      }
-    }
+    Messages.showMessageDialog("Currently, this feature is not available because Baekjun has banned scraping.\nReference : <a href=\"https://help.acmicpc.net/rule\">BOJ Homepage</a>","Caution", AllIcons.Actions.Exit);
+    return;
+//    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+//    String selected = Messages.showInputDialog(e.getProject(), "Input Baekjoon number", "Load Test Data", null);
+//    if (!StringUtils.isBlank(selected)) {
+//      ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
+//
+//      try {
+//        long number = Long.parseLong(selected);
+//        List<TestData> examples = CrawlerProvider.getCrawler(Site.BAEKJOON_OJ).getExamples(number);
+//
+//        myTestListPanel.removeAllTests();
+//
+//        for (TestData testData : examples) {
+//          myTestListPanel.addTest(testData);
+//        }
+//
+//      } catch (NumberFormatException ne) {
+//        Messages.showMessageDialog(e.getProject(), "Input number!", "Load Test Error", null);
+//      }
+//    }
   }
 }
