@@ -23,26 +23,22 @@ public class TestData {
   }
 
   public String getInput() {
-    return StringUtils.rTrim(myInput);
+    return StringUtils.rTrim(StringUtils.removeCarriageReturn(myInput));
   }
 
   public String getOutput() {
-    return StringUtils.rTrim(myOutput);
+    return StringUtils.rTrim(StringUtils.removeCarriageReturn(myOutput));
   }
 
   public void setInput(String myInput) {
-    this.myInput = StringUtils.rTrim(myInput);
+    this.myInput = StringUtils.rTrim(StringUtils.removeCarriageReturn(myInput));
   }
 
   public void setOutput(String myOutput) {
-    this.myOutput = StringUtils.rTrim(myOutput);
-  }
-
-  public String getResult() {
-    return StringUtils.rTrim(myResult);
+    this.myOutput = StringUtils.rTrim(StringUtils.removeCarriageReturn(myOutput));
   }
 
   public void setResult(String myResult) {
-    this.myResult = StringUtils.rTrim(myResult);
+    this.myResult = StringUtils.rTrim(StringUtils.removeCarriageReturn(myResult));
   }
 }
