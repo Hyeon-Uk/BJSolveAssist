@@ -5,6 +5,7 @@
 package com.example.pssupporter.ui;
 
 
+import com.example.pssupporter.ui.factory.JTitleBorderFactory;
 import com.example.pssupporter.vo.TestData;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
@@ -16,6 +17,7 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextArea;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 
 public class MyEditorPanel extends JBPanel {
@@ -43,7 +45,8 @@ public class MyEditorPanel extends JBPanel {
     myInputTextArea.setText(myTestData.getInput());
 
     JBScrollPane myInputTextScrollPane = new JBScrollPane(myInputTextArea);
-    myInputTextScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(JBColor.DARK_GRAY), "Input"));
+    Border inputBorder = JTitleBorderFactory.getBorder("Input");
+    myInputTextScrollPane.setBorder(inputBorder);
     myInputTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     myInputTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -51,7 +54,8 @@ public class MyEditorPanel extends JBPanel {
     myOutputTextArea.setText(myTestData.getOutput());
 
     JBScrollPane myOutputTextScrollPane = new JBScrollPane(myOutputTextArea);
-    myOutputTextScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(JBColor.DARK_GRAY), "Output"));
+    Border outputBorder = JTitleBorderFactory.getBorder("Output");
+    myOutputTextScrollPane.setBorder(outputBorder);
     myOutputTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     myOutputTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -59,7 +63,8 @@ public class MyEditorPanel extends JBPanel {
 
     setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
     JBScrollPane myLogScrollPane = new JBScrollPane(myLogConsoleView.getComponent());
-    myLogScrollPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(JBColor.DARK_GRAY), "Result"));
+    Border resultBorder = JTitleBorderFactory.getBorder("Result");
+    myLogScrollPane.setBorder(resultBorder);
     myLogScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     myLogScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
