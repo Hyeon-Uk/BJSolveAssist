@@ -4,8 +4,8 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListItem;
-import com.example.pssupporter.ui.MyTestListPanel;
+import com.example.pssupporter.ui.list.MyTestListItem;
+import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.IntellijUtils;
 import com.example.pssupporter.utils.runner.CodeRunner;

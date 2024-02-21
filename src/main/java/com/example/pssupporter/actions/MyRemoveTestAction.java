@@ -4,7 +4,7 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListPanel;
+import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;

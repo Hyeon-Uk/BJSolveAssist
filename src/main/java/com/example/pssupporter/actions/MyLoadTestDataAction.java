@@ -4,21 +4,13 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.example.pssupporter.utils.StringUtils;
-import com.example.pssupporter.utils.crawling.CrawlerProvider;
-import com.example.pssupporter.utils.crawling.vo.Site;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
-import com.example.pssupporter.vo.TestData;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class MyLoadTestDataAction extends AnAction {
   @Override

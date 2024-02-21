@@ -2,8 +2,10 @@
  * Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package com.example.pssupporter.ui;
+package com.example.pssupporter.ui.main;
 
+import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
+import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.utils.ComponentManager;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.project.Project;

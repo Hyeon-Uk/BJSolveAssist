@@ -4,7 +4,7 @@
 
 package com.example.pssupporter.utils.thread;
 
-import com.example.pssupporter.ui.MyTestListItem;
+import com.example.pssupporter.ui.list.MyTestListItem;
 import com.example.pssupporter.utils.runner.CodeRunner;
 import com.example.pssupporter.utils.runner.dto.CodeRunnerDTO;
 import com.example.pssupporter.vo.TestData;

@@ -4,7 +4,7 @@
 
 package com.example.pssupporter;
 
-import com.example.pssupporter.ui.MyMainView;
+import com.example.pssupporter.ui.main.MyMainView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
