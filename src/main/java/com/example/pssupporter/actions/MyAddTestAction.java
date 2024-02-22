@@ -24,6 +24,6 @@ public class MyAddTestAction extends AnAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
-    myTestListPanel.addTest();
+    myTestListPanel.addTestData();
   }
 }

@@ -4,8 +4,10 @@
 
 package com.example.pssupporter.actions;
 
+import com.example.pssupporter.ui.editor.MyEditorPanel;
 import com.example.pssupporter.ui.list.MyTestListItem;
 import com.example.pssupporter.ui.list.MyTestListPanel;
+import com.example.pssupporter.ui.main.MyMainView;
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.IntellijUtils;
 import com.example.pssupporter.utils.runner.CodeRunner;
@@ -37,14 +39,19 @@ public class MyRunTestAction extends AnAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    MyEditorPanel myEditorPanel = ComponentManager.getInstance().getComponent("myEditorPanel", MyEditorPanel.class);
+    MyMainView myMainView = ComponentManager.getInstance().getComponent("myMainView", MyMainView.class);
     int selectedIndex = myTestListPanel.getSelectedIndex();
     if (selectedIndex == -1) {
       return;
     }
-    ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
+
+    myMainView.saveAndClear();
+
+    myEditorPanel.clearAll();
     myTestListPanel.clearSelection();
 
-    MyTestListItem selectedItem = myTestListPanel.getMyTestListItem(selectedIndex);
+    MyTestListItem selectedItem = myTestListPanel.getMyTestList(selectedIndex);
     IntellijUtils.getSelectedFile(Objects.requireNonNull(e.getProject()))
             .ifPresentOrElse(selectedFile -> {
                       IntellijUtils.autoSaveFile(selectedFile);

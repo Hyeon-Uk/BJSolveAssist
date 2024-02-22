@@ -4,31 +4,34 @@
 
 package com.example.pssupporter.ui.list;
 
-import com.example.pssupporter.ui.editor.MyEditorPanel;
+import com.example.pssupporter.vo.TestData;
 import com.example.pssupporter.vo.TestStatus;
 
 public class MyTestListItem {
-  private final MyEditorPanel myEditorPanel;
+  private TestData myTestData;
   private TestStatus myStatus;
 
-  public MyTestListItem(MyEditorPanel myEditorPanel) {
-    this(myEditorPanel, TestStatus.READY);
+  public MyTestListItem() {
+    this(new TestData(), TestStatus.READY);
   }
 
-  public MyTestListItem(MyEditorPanel myEditorPanel, TestStatus myStatus) {
-    this.myEditorPanel = myEditorPanel;
+  public MyTestListItem(TestData testData) {
+    this(testData, TestStatus.READY);
+  }
+
+  public MyTestListItem(TestData myTestData, TestStatus myStatus) {
+    this.myTestData = myTestData;
     this.myStatus = myStatus;
   }
 
-  public MyEditorPanel getMyEditorPanel() {
-    return myEditorPanel;
+  public TestData getTestData() {
+    return myTestData;
   }
 
   public TestStatus getStatus() {
     return myStatus;
   }
-
-  public void setStatus(TestStatus myStatus) {
-    this.myStatus = myStatus;
+  public void setStatus(TestStatus status){
+    this.myStatus = status;
   }
 }

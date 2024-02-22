@@ -4,85 +4,58 @@
 
 package com.example.pssupporter.ui.main;
 
+import com.example.pssupporter.ui.editor.EditorPanel;
+import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
-import com.example.pssupporter.ui.list.MyTestListPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.project.Project;
+import com.example.pssupporter.vo.TestData;
 import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBScrollPane;
 
-import javax.swing.*;
 import java.awt.*;
 
+
 public class MyMainView extends JBPanel {
-  private Project myProject;
   private boolean myHorizontal;
-  private JBPanel myTestPanel;
-  private MyTestListPanel myTestListPanel;
-  private JBScrollPane myTestListScrollPane;
-  private JBPanel myEditorPanel;
 
+  private final TestListPanel myTestListPanel;
+  private final EditorPanel myEditorPanel;
+  private final MyToolbarPanel myToolbarPanel;
+  private TestData myCurrentTestData;
 
-  public MyMainView(Project project, boolean horizontal) {
+  public MyMainView(MyToolbarPanel toolbarPanel, TestListPanel testListPanel, EditorPanel editorPanel, boolean horizontal) {
     super(new BorderLayout());
-    this.myProject = project;
+
+    this.myToolbarPanel = toolbarPanel;
+    this.myTestListPanel = testListPanel;
+    this.myEditorPanel = editorPanel;
+
     this.myHorizontal = horizontal;
 
-    setupActionToolbarPanel();
-    setupTestListPanel();
-    setupEditorPanel();
-    setupTestPanel();
-    addComponentsToManager();
-  }
+    this.myCurrentTestData = null;
 
-  /**
-   * add component in component manager
-   */
-  private void addComponentsToManager() {
-    ComponentManager.getInstance().addComponent("myTestListPanel", myTestListPanel);
-    ComponentManager.getInstance().addComponent("myEditorPanel", myEditorPanel);
-  }
-
-  /**
-   * implements test panel that includes testList and editor panel.
-   */
-  private void setupTestPanel() {
-    myTestPanel = new JBPanel(new BorderLayout());
-    this.setLayoutBasedOnOrientation(this.myHorizontal, true);
-    this.add(myTestPanel, BorderLayout.CENTER);
+    setupActionToolbarPanel(myToolbarPanel);
+    setupTestListPanel(myTestListPanel);
+    setupEditorPanel(myEditorPanel);
   }
 
   /**
    * implements editor panel
    */
-  private void setupEditorPanel() {
-    myEditorPanel = new JBPanel(new GridLayout(1, 1));
+  private void setupEditorPanel(EditorPanel editorPanel) {
+    this.add(editorPanel, BorderLayout.CENTER);
   }
 
   /**
    * implement test list panel
    */
-  private void setupTestListPanel() {
-    myTestListPanel = new MyTestListPanel(this.myProject);
-    myTestListScrollPane = new JBScrollPane(myTestListPanel);
-    myTestListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    myTestListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+  private void setupTestListPanel(TestListPanel testListPanel) {
+    this.add(testListPanel, BorderLayout.WEST);
   }
 
   /**
    * implement action panel
    */
-  private void setupActionToolbarPanel() {
-    ActionGroup myActionGroup = getActionGroup("myActionGroup");
-    MyToolbarPanel myActionToolbarPanel = new MyToolbarPanel(myActionGroup, this);
-
-    this.add(myActionToolbarPanel, BorderLayout.NORTH);
-  }
-
-  private ActionGroup getActionGroup(String actionGroupId) {
-    com.intellij.openapi.actionSystem.ActionManager actionManager = com.intellij.openapi.actionSystem.ActionManager.getInstance();
-    return (ActionGroup) actionManager.getAction(actionGroupId);
+  private void setupActionToolbarPanel(MyToolbarPanel toolbarPanel) {
+    this.add(toolbarPanel, BorderLayout.NORTH);
   }
 
   public void setLayoutBasedOnOrientation(boolean horizontal) {
@@ -101,12 +74,41 @@ public class MyMainView extends JBPanel {
   }
 
   private void setHorizontalLayout() {
-    myTestPanel.add(myTestListScrollPane, BorderLayout.WEST);
-    myTestPanel.add(myEditorPanel, BorderLayout.CENTER);
+    this.add(myTestListPanel, BorderLayout.WEST);
+    this.add(myEditorPanel, BorderLayout.CENTER);
   }
 
   private void setVerticalLayout() {
-    myTestPanel.add(myTestListScrollPane, BorderLayout.NORTH);
-    myTestPanel.add(myEditorPanel, BorderLayout.CENTER);
+    this.add(myTestListPanel, BorderLayout.NORTH);
+    this.add(myEditorPanel, BorderLayout.CENTER);
+  }
+
+  //custom action
+  public void changeTestData(){
+    //save current input and output if current test data presents
+    if(myCurrentTestData != null){
+      myCurrentTestData.setInput(myEditorPanel.getInput());
+      myCurrentTestData.setOutput(myEditorPanel.getOutput());
+    }
+
+    myCurrentTestData = myTestListPanel.getSelectedTestData()
+            .orElse(null);
+
+    if(myCurrentTestData != null){
+      myEditorPanel.setInput(myCurrentTestData.getInput());
+      myEditorPanel.setOutput(myCurrentTestData.getOutput());
+      myEditorPanel.setResult(myCurrentTestData.getResult());
+    }
+  }
+
+  public void saveAndClear(){
+    if(myCurrentTestData != null){
+      myCurrentTestData.setInput(myEditorPanel.getInput());
+      myCurrentTestData.setOutput(myEditorPanel.getOutput());
+    }
+
+    myCurrentTestData = null;
+
+    myEditorPanel.clearAll();
   }
 }

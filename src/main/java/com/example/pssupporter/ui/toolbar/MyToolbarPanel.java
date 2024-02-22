@@ -7,13 +7,12 @@ package com.example.pssupporter.ui.toolbar;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.wm.impl.welcomeScreen.BottomLineBorder;
 import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.roots.ToolbarPanel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MyToolbarPanel extends ToolbarPanel {
+public class MyToolbarPanel extends ActionToolbarPanel {
   public MyToolbarPanel(@NotNull ActionGroup actions, JComponent component) {
     super(new JBPanel(new BorderLayout()), actions, "toolbarPlace", component);
     this.setBorder(new BottomLineBorder());

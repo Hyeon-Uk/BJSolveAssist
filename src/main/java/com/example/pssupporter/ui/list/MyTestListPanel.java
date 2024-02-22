@@ -4,74 +4,81 @@
 
 package com.example.pssupporter.ui.list;
 
-import com.example.pssupporter.ui.editor.MyEditorPanel;
-import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.vo.TestData;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.components.JBList;
-import com.intellij.ui.components.JBPanel;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import javax.swing.event.ListSelectionListener;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class MyTestListPanel extends JBList<MyTestListItem> {
+public class MyTestListPanel extends TestListPanel implements TestList {
+  private MyTestList myTestList;
 
-  private DefaultListModel<MyTestListItem> myModel;
-  private Project myProject;
+  public MyTestListPanel(MyTestList testList) {
+    super(testList);
+    this.myTestList = testList;
 
-  protected MyTestListPanel(Project project) {
-    this.myProject = project;
-    myModel = new DefaultListModel<>();
-    setCellRenderer(new MyCellRenderer());
-
-    this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    addListSelectionListener((e) -> {
-      int selectedIndex = this.getSelectedIndex();
-
-      if (selectedIndex == -1) {
-        return;
-      }
-      MyTestListItem selectedItem = myModel.getElementAt(selectedIndex);
-
-      JBPanel myEditorPanel = (JBPanel) ComponentManager.getInstance().getComponent("myEditorPanel");
-
-      ComponentManager.getInstance().removeChildrenComponents(myEditorPanel);
-
-      myEditorPanel.add(selectedItem.getMyEditorPanel());
-      myEditorPanel.repaint();
-    });
-
-    this.setModel(myModel);
+    this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
   }
 
-  public void addTest() {
-    myModel.addElement(new MyTestListItem(new MyEditorPanel(this.myProject)));
+  public MyTestListPanel(MyTestList testList, ListSelectionListener clickEvent) {
+    super(testList);
+    this.myTestList = testList;
+    this.myTestList.addListSelectionListener(clickEvent);
+
+    this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
   }
 
-  public void addTest(TestData testData) {
-    myModel.addElement(new MyTestListItem(new MyEditorPanel(this.myProject, testData)));
+  @Override
+  public int getSelectedIndex() {
+    return myTestList.getSelectedIndex();
   }
 
-  public void removeTest(int index) {
-    myModel.removeElementAt(index);
+  @Override
+  public void addTestData() {
+    myTestList.addTest();
   }
 
-  public void removeAllTests() {
-    myModel.removeAllElements();
+  @Override
+  public void addTestData(TestData testData) {
+    myTestList.addTest(testData);
+  }
+
+  @Override
+  public void removeTestData(int index) {
+    myTestList.removeTest(index);
+  }
+
+  @Override
+  public List<TestData> getAllTestData() {
+    return myTestList.getMyTestListItems()
+            .stream()
+            .map(MyTestListItem::getTestData)
+            .collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<TestData> getTestData(int index) {
+    return Optional.ofNullable(myTestList.getMyTestListItem(index) == null ? null : myTestList.getMyTestListItem(index).getTestData());
+  }
+
+  @Override
+  public Optional<TestData> getSelectedTestData() {
+    return getTestData(this.getSelectedIndex());
+  }
+
+  public void clearSelection() {
+    myTestList.clearSelection();
   }
 
   public List<MyTestListItem> getMyTestListItems() {
-    List<MyTestListItem> result = new ArrayList<>(myModel.size());
-    for (int i = 0; i < myModel.size(); i++) {
-      result.add(myModel.getElementAt(i));
-    }
-
-    return result;
+    return myTestList.getMyTestListItems();
   }
 
-  public MyTestListItem getMyTestListItem(int selectedIndex) {
-    return myModel.getElementAt(selectedIndex);
+  public MyTestListItem getMyTestList(int selectedIndex) {
+    return myTestList.getMyTestListItem(selectedIndex);
   }
 }

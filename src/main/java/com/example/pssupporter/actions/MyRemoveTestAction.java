@@ -4,6 +4,7 @@
 
 package com.example.pssupporter.actions;
 
+import com.example.pssupporter.ui.editor.MyEditorPanel;
 import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.thread.GlobalThreadStore;
@@ -24,12 +25,11 @@ public class MyRemoveTestAction extends AnAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    MyEditorPanel myEditorPanel = ComponentManager.getInstance().getComponent("myEditorPanel", MyEditorPanel.class);
     int selectedIndex = myTestListPanel.getSelectedIndex();
     if (selectedIndex != -1) {
-      ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
-
-      myTestListPanel.removeTest(selectedIndex);
-      myTestListPanel.repaint();
+      myEditorPanel.clearAll();
+      myTestListPanel.removeTestData(selectedIndex);
     }
   }
 }

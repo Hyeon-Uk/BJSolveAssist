@@ -4,7 +4,16 @@
 
 package com.example.pssupporter;
 
+import com.example.pssupporter.actions.MyAddTestAction;
+import com.example.pssupporter.ui.editor.EditorPanel;
+import com.example.pssupporter.ui.editor.MyEditorPanel;
+import com.example.pssupporter.ui.list.*;
 import com.example.pssupporter.ui.main.MyMainView;
+import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
+import com.example.pssupporter.utils.ComponentManager;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -18,8 +27,32 @@ import com.intellij.ui.content.ContentManager;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 public class MyToolWindowFactory implements ToolWindowFactory {
   private MyMainView myMainView;
+  private MyTestList myTestList;
+  private TestListPanel myTestListPanel;
+  private EditorPanel myEditorPanel;
+  private MyToolbarPanel myToolbarPanel;
+
+  private ActionGroup getActionGroup(String actionGroupId) {
+    ActionManager actionManager = ActionManager.getInstance();
+    return (ActionGroup) actionManager.getAction(actionGroupId);
+  }
+  private void createToolbarPanel(JComponent targetComponent,String actionId){
+    ActionGroup action = getActionGroup(actionId);
+    myToolbarPanel = new MyToolbarPanel(action,targetComponent);
+  }
+
+  private void createTestListPanel(){
+    myTestList = new MyTestList(new MyCellRenderer());
+    myTestListPanel = new MyTestListPanel(myTestList,(e)->myMainView.changeTestData());
+  }
+
+  private void createEditorPanel(){
+    myEditorPanel = new MyEditorPanel();
+  }
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -27,12 +60,25 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       ContentManager contentManager = toolWindow.getContentManager();
       ContentFactory contentFactory = ContentFactory.getInstance();
 
-      myMainView = new MyMainView(project, toolWindow.getAnchor().isHorizontal());
+      //ToolbarPanel
+      createToolbarPanel(null,"myActionGroup");
+
+      //EditorPanel
+      createEditorPanel();
+
+      //TestListPanel
+      createTestListPanel();
+
+      myMainView = new MyMainView(myToolbarPanel, myTestListPanel,myEditorPanel,toolWindow.getAnchor().isHorizontal());
 
       Content content = contentFactory.createContent(myMainView, "Supporter", false);
 
       contentManager.addContent(content);
       setupToolWindowEventListener(project);
+
+      ComponentManager.getInstance().addComponent("myMainView",myMainView);
+      ComponentManager.getInstance().addComponent("myTestListPanel",myTestListPanel);
+      ComponentManager.getInstance().addComponent("myEditorPanel",myEditorPanel);
     });
   }
 
