@@ -4,8 +4,10 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListItem;
-import com.example.pssupporter.ui.MyTestListPanel;
+import com.example.pssupporter.ui.editor.MyEditorPanel;
+import com.example.pssupporter.ui.list.MyTestListItem;
+import com.example.pssupporter.ui.list.MyTestListPanel;
+import com.example.pssupporter.ui.main.MyMainView;
 import com.example.pssupporter.utils.ComponentManager;
 import com.example.pssupporter.utils.IntellijUtils;
 import com.example.pssupporter.utils.runner.CodeRunner;
@@ -36,9 +38,13 @@ public class MyRunAllTestsAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
+    MyEditorPanel myEditorPanel = ComponentManager.getInstance().getComponent("myEditorPanel", MyEditorPanel.class);
     MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
+    MyMainView myMainView = ComponentManager.getInstance().getComponent("myMainView", MyMainView.class);
+
+    myMainView.saveAndClear();
     myTestListPanel.clearSelection();
+    myEditorPanel.clearAll();
 
     List<MyTestListItem> myTestListItems = myTestListPanel.getMyTestListItems();
     IntellijUtils.getSelectedFile(Objects.requireNonNull(e.getProject()))
