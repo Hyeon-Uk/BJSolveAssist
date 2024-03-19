@@ -13,6 +13,7 @@ public interface TestList {
   void addTestData();
   void addTestData(TestData testData);
   void removeTestData(int index);
+  void removeAllTestDatas();
   List<TestData> getAllTestData();
   Optional<TestData> getTestData(int index);
   Optional<TestData> getSelectedTestData();

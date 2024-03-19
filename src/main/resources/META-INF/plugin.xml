@@ -60,6 +60,9 @@
             <action id="myRemoveTestAction" class="com.example.pssupporter.actions.MyRemoveTestAction"
                     text="Remove test data"
                     description="Remove test data" icon="AllIcons.General.Remove"/>
+            <action id="myRemoveAllTestAction" class="com.example.pssupporter.actions.MyRemoveAllTestAction"
+                    text="Remove all test datas"
+                    description="Remove all test datas" icon="AllIcons.Actions.GC"/>
             <action id="myRunAllTestsAction" class="com.example.pssupporter.actions.MyRunAllTestsAction"
                     text="Run All Tests"
                     description="Run all tests" icon="AllIcons.Actions.RunAll">

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MyTestListPanel extends TestListPanel implements TestList {
+public class MyTestListPanel extends TestListPanel {
   private MyTestList myTestList;
 
   public MyTestListPanel(MyTestList testList) {
@@ -50,6 +50,11 @@ public class MyTestListPanel extends TestListPanel implements TestList {
   @Override
   public void removeTestData(int index) {
     myTestList.removeTest(index);
+  }
+
+  @Override
+  public void removeAllTestDatas() {
+    myTestList.removeAllTests();
   }
 
   @Override
