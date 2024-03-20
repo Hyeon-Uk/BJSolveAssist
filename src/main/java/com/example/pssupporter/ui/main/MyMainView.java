@@ -6,7 +6,6 @@ package com.example.pssupporter.ui.main;
 
 import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
-import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
 import com.example.pssupporter.vo.TestData;
 import com.intellij.ui.components.JBPanel;
 
@@ -18,13 +17,11 @@ public class MyMainView extends JBPanel {
 
   private final TestListPanel myTestListPanel;
   private final EditorPanel myEditorPanel;
-  private final MyToolbarPanel myToolbarPanel;
   private TestData myCurrentTestData;
 
-  public MyMainView(MyToolbarPanel toolbarPanel, TestListPanel testListPanel, EditorPanel editorPanel, boolean horizontal) {
+  public MyMainView(TestListPanel testListPanel, EditorPanel editorPanel, boolean horizontal) {
     super(new BorderLayout());
 
-    this.myToolbarPanel = toolbarPanel;
     this.myTestListPanel = testListPanel;
     this.myEditorPanel = editorPanel;
 
@@ -32,7 +29,6 @@ public class MyMainView extends JBPanel {
 
     this.myCurrentTestData = null;
 
-    setupActionToolbarPanel(myToolbarPanel);
     setupTestListPanel(myTestListPanel);
     setupEditorPanel(myEditorPanel);
   }
@@ -49,13 +45,6 @@ public class MyMainView extends JBPanel {
    */
   private void setupTestListPanel(TestListPanel testListPanel) {
     this.add(testListPanel, BorderLayout.WEST);
-  }
-
-  /**
-   * implement action panel
-   */
-  private void setupActionToolbarPanel(MyToolbarPanel toolbarPanel) {
-    this.add(toolbarPanel, BorderLayout.NORTH);
   }
 
   public void setLayoutBasedOnOrientation(boolean horizontal) {
@@ -84,9 +73,9 @@ public class MyMainView extends JBPanel {
   }
 
   //custom action
-  public void changeTestData(){
+  public void changeTestData() {
     //save current input and output if current test data presents
-    if(myCurrentTestData != null){
+    if (myCurrentTestData != null) {
       myCurrentTestData.setInput(myEditorPanel.getInput());
       myCurrentTestData.setOutput(myEditorPanel.getOutput());
     }
@@ -94,15 +83,15 @@ public class MyMainView extends JBPanel {
     myCurrentTestData = myTestListPanel.getSelectedTestData()
             .orElse(null);
 
-    if(myCurrentTestData != null){
+    if (myCurrentTestData != null) {
       myEditorPanel.setInput(myCurrentTestData.getInput());
       myEditorPanel.setOutput(myCurrentTestData.getOutput());
       myEditorPanel.setResult(myCurrentTestData.getResult());
     }
   }
 
-  public void saveAndClear(){
-    if(myCurrentTestData != null){
+  public void saveAndClear() {
+    if (myCurrentTestData != null) {
       myCurrentTestData.setInput(myEditorPanel.getInput());
       myCurrentTestData.setOutput(myEditorPanel.getOutput());
     }

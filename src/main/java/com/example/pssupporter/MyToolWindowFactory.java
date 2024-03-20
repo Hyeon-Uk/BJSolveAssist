@@ -4,16 +4,17 @@
 
 package com.example.pssupporter;
 
-import com.example.pssupporter.actions.MyAddTestAction;
 import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.editor.MyEditorPanel;
-import com.example.pssupporter.ui.list.*;
+import com.example.pssupporter.ui.list.MyCellRenderer;
+import com.example.pssupporter.ui.list.MyTestList;
+import com.example.pssupporter.ui.list.MyTestListPanel;
+import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.main.MyMainView;
 import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
 import com.example.pssupporter.utils.ComponentManager;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -21,6 +22,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
@@ -28,6 +30,7 @@ import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
   private MyMainView myMainView;
@@ -40,17 +43,18 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     ActionManager actionManager = ActionManager.getInstance();
     return (ActionGroup) actionManager.getAction(actionGroupId);
   }
-  private void createToolbarPanel(JComponent targetComponent,String actionId){
+
+  private void createToolbarPanel(JComponent targetComponent, String actionId) {
     ActionGroup action = getActionGroup(actionId);
-    myToolbarPanel = new MyToolbarPanel(action,targetComponent);
+    myToolbarPanel = new MyToolbarPanel(action, targetComponent);
   }
 
-  private void createTestListPanel(){
+  private void createTestListPanel() {
     myTestList = new MyTestList(new MyCellRenderer());
-    myTestListPanel = new MyTestListPanel(myTestList,(e)->myMainView.changeTestData());
+    myTestListPanel = new MyTestListPanel(myTestList, (e) -> myMainView.changeTestData());
   }
 
-  private void createEditorPanel(){
+  private void createEditorPanel() {
     myEditorPanel = new MyEditorPanel();
   }
 
@@ -61,7 +65,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       ContentFactory contentFactory = ContentFactory.getInstance();
 
       //ToolbarPanel
-      createToolbarPanel(null,"myActionGroup");
+      createToolbarPanel(null, "myActionGroup");
 
       //EditorPanel
       createEditorPanel();
@@ -69,16 +73,20 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       //TestListPanel
       createTestListPanel();
 
-      myMainView = new MyMainView(myToolbarPanel, myTestListPanel,myEditorPanel,toolWindow.getAnchor().isHorizontal());
+      myMainView = new MyMainView(myTestListPanel, myEditorPanel, toolWindow.getAnchor().isHorizontal());
 
-      Content content = contentFactory.createContent(myMainView, "Supporter", false);
+      JBPanel totalView = new JBPanel(new BorderLayout());
+      totalView.add(myToolbarPanel, BorderLayout.NORTH);
+      totalView.add(myMainView, BorderLayout.CENTER);
+
+      Content content = contentFactory.createContent(totalView, "Supporter", false);
 
       contentManager.addContent(content);
       setupToolWindowEventListener(project);
 
-      ComponentManager.getInstance().addComponent("myMainView",myMainView);
-      ComponentManager.getInstance().addComponent("myTestListPanel",myTestListPanel);
-      ComponentManager.getInstance().addComponent("myEditorPanel",myEditorPanel);
+      ComponentManager.getInstance().addComponent("myMainView", myMainView);
+      ComponentManager.getInstance().addComponent("myTestListPanel", myTestListPanel);
+      ComponentManager.getInstance().addComponent("myEditorPanel", myEditorPanel);
     });
   }
 
