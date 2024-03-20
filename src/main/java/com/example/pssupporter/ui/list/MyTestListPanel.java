@@ -10,18 +10,9 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class MyTestListPanel extends TestListPanel {
-  private MyTestList myTestList;
-
-  public MyTestListPanel(MyTestList testList) {
-    super(testList);
-    this.myTestList = testList;
-
-    this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-  }
+  private final MyTestList myTestList;
 
   public MyTestListPanel(MyTestList testList, ListSelectionListener clickEvent) {
     super(testList);
@@ -62,7 +53,7 @@ public class MyTestListPanel extends TestListPanel {
     return myTestList.getMyTestListItems()
             .stream()
             .map(MyTestListItem::getTestData)
-            .collect(Collectors.toList());
+            .toList();
   }
 
   @Override
@@ -75,14 +66,17 @@ public class MyTestListPanel extends TestListPanel {
     return getTestData(this.getSelectedIndex());
   }
 
+  @Override
   public void clearSelection() {
     myTestList.clearSelection();
   }
 
+  @Override
   public List<MyTestListItem> getMyTestListItems() {
     return myTestList.getMyTestListItems();
   }
 
+  @Override
   public MyTestListItem getMyTestList(int selectedIndex) {
     return myTestList.getMyTestListItem(selectedIndex);
   }

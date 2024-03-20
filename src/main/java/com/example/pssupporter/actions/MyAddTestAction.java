@@ -4,26 +4,34 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.list.MyTestListPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.example.pssupporter.utils.thread.GlobalThreadStore;
+import com.example.pssupporter.ui.list.TestListPanel;
+import com.example.pssupporter.utils.thread.MyThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class MyAddTestAction extends AnAction {
+  private final TestListPanel myTestListPanel;
+  private final MyThreadStore myThreadStore;
+
+  public MyAddTestAction(TestListPanel myTestListPanel, MyThreadStore myThreadStore) {
+    super("Add Test Data", "This action can add Test", AllIcons.General.Add);
+    this.myTestListPanel = myTestListPanel;
+    this.myThreadStore = myThreadStore;
+  }
+
   @Override
   public void update(@NotNull AnActionEvent e) {
     super.update(e);
-    boolean isRunning = GlobalThreadStore.getInstance()
+    boolean isRunning = myThreadStore
             .hasRunningThreads(ThreadGroupName.TEST_RUNNING);
     e.getPresentation().setEnabled(!isRunning);
   }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
     myTestListPanel.addTestData();
   }
 }

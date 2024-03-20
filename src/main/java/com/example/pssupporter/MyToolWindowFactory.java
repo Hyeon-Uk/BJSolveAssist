@@ -4,6 +4,7 @@
 
 package com.example.pssupporter;
 
+import com.example.pssupporter.actions.*;
 import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.editor.MyEditorPanel;
 import com.example.pssupporter.ui.list.MyCellRenderer;
@@ -12,9 +13,10 @@ import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.main.MyMainView;
 import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
-import com.example.pssupporter.utils.ComponentManager;
+import com.example.pssupporter.utils.thread.MyThreadStore;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -34,59 +36,70 @@ import java.awt.*;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
   private MyMainView myMainView;
-  private MyTestList myTestList;
   private TestListPanel myTestListPanel;
   private EditorPanel myEditorPanel;
   private MyToolbarPanel myToolbarPanel;
+  private MyThreadStore myThreadStore;
+
+  private MyThreadStore createThreadStore() {
+    return new MyThreadStore();
+  }
+
+  private void createActionGroup() {
+    DefaultActionGroup myActionGroup = new DefaultActionGroup();
+    myActionGroup.add(new MyLoadTestDataAction(myThreadStore));
+    myActionGroup.add(new MyAddTestAction(myTestListPanel, myThreadStore));
+    myActionGroup.add(new MyRemoveTestAction(myTestListPanel, myEditorPanel, myThreadStore));
+    myActionGroup.add(new MyRemoveAllTestAction(myTestListPanel, myEditorPanel, myThreadStore));
+    myActionGroup.add(new MyRunAllTestsAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore));
+    myActionGroup.add(new MyRunTestAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore));
+    myActionGroup.add(new MyStopAllTestsAction(myTestListPanel, myThreadStore));
+
+    ActionManager actionManager = ActionManager.getInstance();
+    actionManager.registerAction("myActionGroup", myActionGroup);
+  }
 
   private ActionGroup getActionGroup(String actionGroupId) {
     ActionManager actionManager = ActionManager.getInstance();
     return (ActionGroup) actionManager.getAction(actionGroupId);
   }
 
-  private void createToolbarPanel(JComponent targetComponent, String actionId) {
+  private MyToolbarPanel createToolbarPanel(JComponent targetComponent, String actionId) {
     ActionGroup action = getActionGroup(actionId);
-    myToolbarPanel = new MyToolbarPanel(action, targetComponent);
+    return new MyToolbarPanel(action, targetComponent);
   }
 
-  private void createTestListPanel() {
-    myTestList = new MyTestList(new MyCellRenderer());
-    myTestListPanel = new MyTestListPanel(myTestList, (e) -> myMainView.changeTestData());
+  private TestListPanel createTestListPanel() {
+    MyTestList myTestList = new MyTestList(new MyCellRenderer());
+    return new MyTestListPanel(myTestList, (e) -> myMainView.changeTestData());
   }
 
-  private void createEditorPanel() {
-    myEditorPanel = new MyEditorPanel();
+  private EditorPanel createEditorPanel() {
+    return new MyEditorPanel();
   }
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
     ApplicationManager.getApplication().invokeLater(() -> {
-      ContentManager contentManager = toolWindow.getContentManager();
-      ContentFactory contentFactory = ContentFactory.getInstance();
-
-      //ToolbarPanel
-      createToolbarPanel(null, "myActionGroup");
-
-      //EditorPanel
-      createEditorPanel();
-
-      //TestListPanel
-      createTestListPanel();
-
+      myTestListPanel = createTestListPanel();
+      myEditorPanel = createEditorPanel();
       myMainView = new MyMainView(myTestListPanel, myEditorPanel, toolWindow.getAnchor().isHorizontal());
+
+      myThreadStore = createThreadStore();
+      createActionGroup();
+      myToolbarPanel = createToolbarPanel(myMainView, "myActionGroup");
 
       JBPanel totalView = new JBPanel(new BorderLayout());
       totalView.add(myToolbarPanel, BorderLayout.NORTH);
       totalView.add(myMainView, BorderLayout.CENTER);
 
+      ContentFactory contentFactory = ContentFactory.getInstance();
+      ContentManager contentManager = toolWindow.getContentManager();
+
       Content content = contentFactory.createContent(totalView, "Supporter", false);
 
       contentManager.addContent(content);
       setupToolWindowEventListener(project);
-
-      ComponentManager.getInstance().addComponent("myMainView", myMainView);
-      ComponentManager.getInstance().addComponent("myTestListPanel", myTestListPanel);
-      ComponentManager.getInstance().addComponent("myEditorPanel", myEditorPanel);
     });
   }
 
