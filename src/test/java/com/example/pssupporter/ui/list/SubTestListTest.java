@@ -13,19 +13,19 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-class MyTestListTest {
+class SubTestListTest {
   private MyCellRenderer myCellRenderer = new MyCellRenderer();
-  private MyTestList myTestList = new MyTestList(myCellRenderer);
+  private MySubTestList mySubTestList = new MySubTestList(myCellRenderer);
 
   @Test
   void addTestWithoutParam() {
     //given
 
     //when
-    myTestList.addTest();
+    mySubTestList.addTest();
 
     //then
-    List<MyTestListItem> myTestListItems = myTestList.getMyTestListItems();
+    List<MyTestListItem> myTestListItems = mySubTestList.getMyTestListItems();
     assertEquals(1, myTestListItems.size());
     MyTestListItem item = myTestListItems.get(0);
     assertEquals("", item.getTestData().getInput());
@@ -43,10 +43,10 @@ class MyTestListTest {
     TestData testData = new TestData(testInput, testOutput, testResult);
 
     //when
-    myTestList.addTest(testData);
+    mySubTestList.addTest(testData);
 
     //then
-    List<MyTestListItem> myTestListItems = myTestList.getMyTestListItems();
+    List<MyTestListItem> myTestListItems = mySubTestList.getMyTestListItems();
     assertEquals(1, myTestListItems.size());
     MyTestListItem item = myTestListItems.get(0);
     assertEquals(testInput, item.getTestData().getInput());
@@ -65,14 +65,14 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
     int removeIndex = 2;
 
     //when
-    myTestList.removeTest(removeIndex);
+    mySubTestList.removeTest(removeIndex);
 
     //then
-    List<MyTestListItem> items = myTestList.getMyTestListItems();
+    List<MyTestListItem> items = mySubTestList.getMyTestListItems();
     assertEquals(testDatas.size() - 1, items.size());
     for (int i = 0; i < items.size(); i++) {
       int index = i >= removeIndex ? i + 1 : i;
@@ -92,14 +92,14 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
     int removeIndex = testDatas.size() + 10;
 
     //when
-    myTestList.removeTest(removeIndex);
+    mySubTestList.removeTest(removeIndex);
 
     //then
-    List<MyTestListItem> items = myTestList.getMyTestListItems();
+    List<MyTestListItem> items = mySubTestList.getMyTestListItems();
     assertEquals(testDatas.size(), items.size());
     for (int i = 0; i < items.size(); i++) {
       assertEquals(testDatas.get(i).getInput(), items.get(i).getTestData().getInput());
@@ -118,13 +118,13 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
 
     //when
-    myTestList.removeAllTests();
+    mySubTestList.removeAllTests();
 
     //then
-    assertEquals(0, myTestList.getMyTestListItems().size());
+    assertEquals(0, mySubTestList.getMyTestListItems().size());
   }
 
   @Test
@@ -137,10 +137,10 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
 
     //when
-    List<MyTestListItem> items = myTestList.getMyTestListItems();
+    List<MyTestListItem> items = mySubTestList.getMyTestListItems();
     assertEquals(testDatas.size(), items.size());
   }
 
@@ -154,11 +154,11 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
     int selectedIndex = 2;
 
     //when
-    MyTestListItem item = myTestList.getMyTestListItem(selectedIndex);
+    MyTestListItem item = mySubTestList.getMyTestListItem(selectedIndex);
     assertEquals(testDatas.get(selectedIndex).getInput(), item.getTestData().getInput());
     assertEquals(testDatas.get(selectedIndex).getOutput(), item.getTestData().getOutput());
     assertEquals(testDatas.get(selectedIndex).getResult(), item.getTestData().getResult());
@@ -174,11 +174,29 @@ class MyTestListTest {
             , new TestData("3", "3", "3")
             , new TestData("4", "4", "4")
             , new TestData("2", "2", "2"));
-    testDatas.stream().forEach(myTestList::addTest);
+    testDatas.stream().forEach(mySubTestList::addTest);
     int selectedIndex = -1;//select none item
 
     //when
-    MyTestListItem item = myTestList.getMyTestListItem(selectedIndex);
+    MyTestListItem item = mySubTestList.getMyTestListItem(selectedIndex);
+    assertNull(item);
+  }
+
+  @Test
+  void getMyTestListItemWithOverIndexTest() {
+    //given
+    List<TestData> testDatas = List.of(
+            new TestData("0", "0", "0")
+            , new TestData("1", "1", "1")
+            , new TestData("2", "2", "2")
+            , new TestData("3", "3", "3")
+            , new TestData("4", "4", "4")
+            , new TestData("2", "2", "2"));
+    testDatas.stream().forEach(mySubTestList::addTest);
+    int selectedIndex = testDatas.size() + 10;
+
+    //when
+    MyTestListItem item = mySubTestList.getMyTestListItem(selectedIndex);
     assertNull(item);
   }
 }

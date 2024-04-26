@@ -9,7 +9,7 @@ import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.editor.MyEditorPanel;
 import com.example.pssupporter.ui.editor.panel.*;
 import com.example.pssupporter.ui.list.MyCellRenderer;
-import com.example.pssupporter.ui.list.MyTestList;
+import com.example.pssupporter.ui.list.MySubTestList;
 import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.main.MyMainView;
@@ -71,8 +71,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
   }
 
   private TestListPanel createTestListPanel() {
-    MyTestList myTestList = new MyTestList(new MyCellRenderer());
-    return new MyTestListPanel(myTestList, (e) -> myMainView.changeTestData());
+    MySubTestList mySubTestList = new MySubTestList(new MyCellRenderer());
+    return new MyTestListPanel(mySubTestList, (e) -> myMainView.changeTestData());
   }
 
   private EditorPanel createEditorPanel() {

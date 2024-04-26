@@ -4,17 +4,17 @@
 
 package com.example.pssupporter.ui.list;
 
+import com.example.pssupporter.ui.list.panel.SubTestList;
 import com.example.pssupporter.vo.TestData;
-import com.intellij.ui.components.JBList;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTestList extends JBList<MyTestListItem> {
+public class MySubTestList extends SubTestList {
   private DefaultListModel<MyTestListItem> myModel;
 
-  public MyTestList(ListCellRenderer<MyTestListItem> cellRenderer) {
+  public MySubTestList(ListCellRenderer<MyTestListItem> cellRenderer) {
     this.setCellRenderer(cellRenderer);
     myModel = new DefaultListModel<>();
 
@@ -33,7 +33,7 @@ public class MyTestList extends JBList<MyTestListItem> {
   }
 
   public void removeTest(int index) {
-    if(0<= index && index < myModel.size()) {
+    if (0 <= index && index < myModel.size()) {
       myModel.removeElementAt(index);
     }
   }
@@ -52,6 +52,6 @@ public class MyTestList extends JBList<MyTestListItem> {
   }
 
   public MyTestListItem getMyTestListItem(int selectedIndex) {
-    return selectedIndex == -1 ? null : myModel.getElementAt(selectedIndex);
+    return selectedIndex < 0 || selectedIndex >= myModel.getSize() ? null : myModel.getElementAt(selectedIndex);
   }
 }

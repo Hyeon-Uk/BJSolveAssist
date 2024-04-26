@@ -4,6 +4,7 @@
 
 package com.example.pssupporter.ui.list;
 
+import com.example.pssupporter.ui.list.panel.SubTestList;
 import com.example.pssupporter.vo.TestData;
 
 import javax.swing.*;
@@ -12,12 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class MyTestListPanel extends TestListPanel {
-  private final MyTestList myTestList;
+  private final SubTestList mySubTestList;
 
-  public MyTestListPanel(MyTestList testList, ListSelectionListener clickEvent) {
+  public MyTestListPanel(SubTestList testList, ListSelectionListener clickEvent) {
     super(testList);
-    this.myTestList = testList;
-    this.myTestList.addListSelectionListener(clickEvent);
+    this.mySubTestList = testList;
+    this.mySubTestList.addListSelectionListener(clickEvent);
 
     this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -25,40 +26,39 @@ public class MyTestListPanel extends TestListPanel {
 
   @Override
   public int getSelectedIndex() {
-    return myTestList.getSelectedIndex();
+    return mySubTestList.getSelectedIndex();
   }
 
   @Override
   public void addTestData() {
-    myTestList.addTest();
+    mySubTestList.addTest();
   }
 
   @Override
   public void addTestData(TestData testData) {
-    myTestList.addTest(testData);
+    mySubTestList.addTest(testData);
   }
 
   @Override
   public void removeTestData(int index) {
-    myTestList.removeTest(index);
+    if (0 <= index && index < mySubTestList.getMyTestListItems().size()) {
+      mySubTestList.removeTest(index);
+    }
   }
 
   @Override
   public void removeAllTestDatas() {
-    myTestList.removeAllTests();
+    mySubTestList.removeAllTests();
   }
 
   @Override
   public List<TestData> getAllTestData() {
-    return myTestList.getMyTestListItems()
-            .stream()
-            .map(MyTestListItem::getTestData)
-            .toList();
+    return mySubTestList.getMyTestListItems().stream().map(MyTestListItem::getTestData).toList();
   }
 
   @Override
   public Optional<TestData> getTestData(int index) {
-    return Optional.ofNullable(myTestList.getMyTestListItem(index) == null ? null : myTestList.getMyTestListItem(index).getTestData());
+    return Optional.ofNullable(mySubTestList.getMyTestListItem(index) == null ? null : mySubTestList.getMyTestListItem(index).getTestData());
   }
 
   @Override
@@ -68,16 +68,16 @@ public class MyTestListPanel extends TestListPanel {
 
   @Override
   public void clearSelection() {
-    myTestList.clearSelection();
+    mySubTestList.clearSelection();
   }
 
   @Override
   public List<MyTestListItem> getMyTestListItems() {
-    return myTestList.getMyTestListItems();
+    return mySubTestList.getMyTestListItems();
   }
 
   @Override
   public MyTestListItem getMyTestList(int selectedIndex) {
-    return myTestList.getMyTestListItem(selectedIndex);
+    return mySubTestList.getMyTestListItem(selectedIndex);
   }
 }
