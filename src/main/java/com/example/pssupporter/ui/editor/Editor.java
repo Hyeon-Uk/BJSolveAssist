@@ -10,5 +10,6 @@ public interface Editor {
   void setInput(String input);
   void setOutput(String output);
   void setResult(String result);
+  String getResult();
   void clearAll();
 }

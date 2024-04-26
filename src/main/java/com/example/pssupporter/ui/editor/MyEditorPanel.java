@@ -5,16 +5,13 @@
 package com.example.pssupporter.ui.editor;
 
 
+import com.example.pssupporter.ui.editor.panel.InputEditorPanel;
+import com.example.pssupporter.ui.editor.panel.OutputEditorPanel;
+import com.example.pssupporter.ui.editor.panel.ResultEditorPanel;
 import com.example.pssupporter.ui.factory.JTitleBorderFactory;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.components.JBTextArea;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -22,36 +19,33 @@ import java.awt.*;
 
 public class MyEditorPanel extends EditorPanel {
 
-  private final JBTextArea myInputTextArea;
-  private final JBTextArea myOutputTextArea;
-  private final ConsoleView myLogConsoleView;
+  private final InputEditorPanel myInputEditorPanel;
+  private final OutputEditorPanel myOutputEditorPanel;
+  private final ResultEditorPanel myResultEditorPanel;
 
-  public MyEditorPanel() {
+  public MyEditorPanel(InputEditorPanel inputEditorPanel, OutputEditorPanel outputEditorPanel, ResultEditorPanel resultEditorPanel) {
     this.setLayout(new BorderLayout());
     this.setBorder(BorderFactory.createLineBorder(JBColor.DARK_GRAY));
+    myInputEditorPanel = inputEditorPanel;
+    myOutputEditorPanel = outputEditorPanel;
+    myResultEditorPanel = resultEditorPanel;
 
     JBPanel inputOutputPanel = new JBPanel(new GridLayout(1, 2));
 
-    myInputTextArea = new JBTextArea();
-
-    JBScrollPane myInputTextScrollPane = new JBScrollPane(myInputTextArea);
+    JBScrollPane myInputTextScrollPane = new JBScrollPane(myInputEditorPanel);
     Border inputBorder = JTitleBorderFactory.getBorder("Input");
     myInputTextScrollPane.setBorder(inputBorder);
     myInputTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     myInputTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-    myOutputTextArea = new JBTextArea();
-
-    JBScrollPane myOutputTextScrollPane = new JBScrollPane(myOutputTextArea);
+    JBScrollPane myOutputTextScrollPane = new JBScrollPane(myOutputEditorPanel);
     Border outputBorder = JTitleBorderFactory.getBorder("Output");
     myOutputTextScrollPane.setBorder(outputBorder);
     myOutputTextScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     myOutputTextScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-    myLogConsoleView = createConsoleView();
-
     setBorder(BorderFactory.createLineBorder(JBColor.LIGHT_GRAY));
-    JBScrollPane myLogScrollPane = new JBScrollPane(myLogConsoleView.getComponent());
+    JBScrollPane myLogScrollPane = new JBScrollPane(myResultEditorPanel);
     Border resultBorder = JTitleBorderFactory.getBorder("Result");
     myLogScrollPane.setBorder(resultBorder);
     myLogScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -72,39 +66,38 @@ public class MyEditorPanel extends EditorPanel {
 
   @Override
   public void clearAll() {
-    myInputTextArea.setText("");
-    myOutputTextArea.setText("");
-    myLogConsoleView.clear();
+    myInputEditorPanel.setInput("");
+    myOutputEditorPanel.setOutput("");
+    myResultEditorPanel.setResult("");
   }
 
   @Override
   public String getInput() {
-    return myInputTextArea.getText();
+    return myInputEditorPanel.getInput();
   }
 
   @Override
   public String getOutput() {
-    return myOutputTextArea.getText();
+    return myOutputEditorPanel.getOutput();
   }
 
   @Override
   public void setInput(String input) {
-    myInputTextArea.setText(input);
+    myInputEditorPanel.setInput(input);
   }
 
   @Override
   public void setOutput(String output) {
-    myOutputTextArea.setText(output);
+    myOutputEditorPanel.setOutput(output);
   }
 
   @Override
   public void setResult(String result) {
-    myLogConsoleView.clear();
-    myLogConsoleView.print(result, ConsoleViewContentType.SYSTEM_OUTPUT);
+    myResultEditorPanel.setResult(result);
   }
 
-  private ConsoleView createConsoleView() {
-    Project project = ProjectManager.getInstance().getDefaultProject();
-    return TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+  @Override
+  public String getResult() {
+    return myResultEditorPanel.getResult();
   }
 }

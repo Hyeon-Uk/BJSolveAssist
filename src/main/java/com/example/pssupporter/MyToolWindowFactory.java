@@ -7,6 +7,7 @@ package com.example.pssupporter;
 import com.example.pssupporter.actions.*;
 import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.editor.MyEditorPanel;
+import com.example.pssupporter.ui.editor.panel.*;
 import com.example.pssupporter.ui.list.MyCellRenderer;
 import com.example.pssupporter.ui.list.MyTestList;
 import com.example.pssupporter.ui.list.MyTestListPanel;
@@ -75,7 +76,10 @@ public class MyToolWindowFactory implements ToolWindowFactory {
   }
 
   private EditorPanel createEditorPanel() {
-    return new MyEditorPanel();
+    InputEditorPanel inputEditorPanel = new MyInputEditorPanel();
+    OutputEditorPanel outputEditorPanel = new MyOutputEditorPanel();
+    ResultEditorPanel resultEditorPanel = new MyResultEditorPanel();
+    return new MyEditorPanel(inputEditorPanel, outputEditorPanel, resultEditorPanel);
   }
 
   @Override
