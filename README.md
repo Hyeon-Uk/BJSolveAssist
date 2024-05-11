@@ -1,4 +1,9 @@
 <h1>This Plugin supports you to solve Baekjoon easier</h1>
+<hr>
+
+[Marketplace](https://plugins.jetbrains.com/plugin/23468-bjsolveassist)
+
+<hr>
 <h1>Notification!</h1>
 - Currently, it supports only `java` language.<br/>
 - It runs on your own computer environment. please install JDK on your device.<br/>
