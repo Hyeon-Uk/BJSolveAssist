@@ -4,7 +4,7 @@
 
 package com.example.pssupporter.utils.thread;
 
-import com.example.pssupporter.ui.MyTestListItem;
+import com.example.pssupporter.ui.list.MyTestListItem;
 import com.example.pssupporter.utils.runner.CodeRunner;
 import com.example.pssupporter.utils.runner.dto.CodeRunnerDTO;
 import com.example.pssupporter.vo.TestData;
@@ -20,7 +20,7 @@ public class TestRunningThread extends Thread {
     this.myFilePath = myFilePath;
     this.myCodeRunner = myCodeRunner;
     this.myTestListItem = myTestListItem;
-    this.myTestData = myTestListItem.getMyEditorPanel().getTestData();
+    this.myTestData = myTestListItem.getTestData();
   }
 
   @Override
@@ -40,7 +40,7 @@ public class TestRunningThread extends Thread {
       myTestListItem.setStatus(TestStatus.FAIL);
     }
 
-    myTestListItem.getMyEditorPanel().setResult(result);
+    myTestData.setResult(result);
   }
 
   @Override

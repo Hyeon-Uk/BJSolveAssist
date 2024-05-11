@@ -20,6 +20,13 @@ public class TestData {
   public TestData(String myInput, String myOutput) {
     setInput(myInput);
     setOutput(myOutput);
+    setResult("");
+  }
+
+  public TestData(String myInput, String myOutput, String myResult) {
+    setInput(myInput);
+    setOutput(myOutput);
+    setResult(myResult);
   }
 
   public String getInput() {
@@ -40,5 +47,18 @@ public class TestData {
 
   public void setResult(String myResult) {
     this.myResult = StringUtils.rTrim(StringUtils.removeCarriageReturn(myResult));
+  }
+
+  public String getResult() {
+    return StringUtils.rTrim(StringUtils.removeCarriageReturn(myResult));
+  }
+
+  @Override
+  public String toString() {
+    return "TestData{" +
+            "myInput='" + myInput + '\'' +
+            ", myOutput='" + myOutput + '\'' +
+            ", myResult='" + myResult + '\'' +
+            '}';
   }
 }
