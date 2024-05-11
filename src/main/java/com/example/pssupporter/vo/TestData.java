@@ -20,6 +20,7 @@ public class TestData {
   public TestData(String myInput, String myOutput) {
     setInput(myInput);
     setOutput(myOutput);
+    setResult("");
   }
 
   public TestData(String myInput, String myOutput, String myResult) {

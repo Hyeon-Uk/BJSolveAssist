@@ -13,6 +13,17 @@ import java.util.List;
 
 public class FakeSubTestList extends SubTestList {
   List<MyTestListItem> lists = new ArrayList<>();
+  int selectedIndex = -1;
+
+  @Override
+  public void setSelectedIndex(int index) {
+    this.selectedIndex = index;
+  }
+
+  @Override
+  public int getSelectedIndex() {
+    return this.selectedIndex;
+  }
 
   @Override
   public void addTest() {
