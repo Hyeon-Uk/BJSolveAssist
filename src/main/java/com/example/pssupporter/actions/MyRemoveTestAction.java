@@ -4,32 +4,41 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.example.pssupporter.utils.thread.GlobalThreadStore;
+import com.example.pssupporter.ui.editor.EditorPanel;
+import com.example.pssupporter.ui.list.TestListPanel;
+import com.example.pssupporter.utils.thread.MyThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class MyRemoveTestAction extends AnAction {
+  private final TestListPanel myTestListPanel;
+  private final EditorPanel myEditorPanel;
+  private final MyThreadStore myThreadStore;
+
+  public MyRemoveTestAction(TestListPanel myTestListPanel, EditorPanel myEditorPanel, MyThreadStore myThreadStore) {
+    super("Remove Test Data Set", "This action can remove test data set", AllIcons.General.Remove);
+    this.myTestListPanel = myTestListPanel;
+    this.myEditorPanel = myEditorPanel;
+    this.myThreadStore = myThreadStore;
+  }
+
   @Override
   public void update(@NotNull AnActionEvent e) {
     super.update(e);
-    boolean isRunning = GlobalThreadStore.getInstance()
+    boolean isRunning = myThreadStore
             .hasRunningThreads(ThreadGroupName.TEST_RUNNING);
     e.getPresentation().setEnabled(!isRunning);
   }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
     int selectedIndex = myTestListPanel.getSelectedIndex();
     if (selectedIndex != -1) {
-      ComponentManager.getInstance().removeChildrenComponentsByName("myEditorPanel");
-
-      myTestListPanel.removeTest(selectedIndex);
-      myTestListPanel.repaint();
+      myEditorPanel.clearAll();
+      myTestListPanel.removeTestData(selectedIndex);
     }
   }
 }

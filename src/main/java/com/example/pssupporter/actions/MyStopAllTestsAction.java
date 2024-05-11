@@ -4,29 +4,37 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.ui.MyTestListPanel;
-import com.example.pssupporter.utils.ComponentManager;
-import com.example.pssupporter.utils.thread.GlobalThreadStore;
+import com.example.pssupporter.ui.list.TestListPanel;
+import com.example.pssupporter.utils.thread.MyThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class MyStopAllTestsAction extends AnAction {
+  private final TestListPanel myTestListPanel;
+  private final MyThreadStore myThreadStore;
+
+  public MyStopAllTestsAction(TestListPanel myTestListPanel, MyThreadStore myThreadStore) {
+    super("Stop All Running Tests", "This action can stop all tests", AllIcons.Actions.Suspend);
+    this.myTestListPanel = myTestListPanel;
+    this.myThreadStore = myThreadStore;
+  }
+
   @Override
   public void update(@NotNull AnActionEvent e) {
     super.update(e);
-    boolean isRunning = GlobalThreadStore.getInstance()
+    boolean isRunning = myThreadStore
             .hasRunningThreads(ThreadGroupName.TEST_RUNNING);
     e.getPresentation().setEnabled(isRunning);
 
-    MyTestListPanel myTestListPanel = ComponentManager.getInstance().getComponent("myTestListPanel", MyTestListPanel.class);
     myTestListPanel.setEnabled(!isRunning);
   }
 
   @Override
   public void actionPerformed(AnActionEvent e) {
-    GlobalThreadStore.getInstance()
+    myThreadStore
             .interruptThreads(ThreadGroupName.TEST_RUNNING);
   }
 }

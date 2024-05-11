@@ -16,22 +16,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * This class will support you to maintain and run threads group easier
  */
-public class GlobalThreadStore {
-  private static final GlobalThreadStore ourInstance = new GlobalThreadStore();
+public class MyThreadStore {
   private final Map<ThreadGroupName, ThreadPoolExecutor> myThreadStore;
 
-  private GlobalThreadStore() {
+  public MyThreadStore() {
     myThreadStore = new EnumMap<>(ThreadGroupName.class);
 
     Arrays.stream(ThreadGroupName.values()).forEach(tg -> myThreadStore.put(tg, tg.getThreadPoolExecutor()));
-  }
-
-
-  /**
-   * @return ourInstance singleton instance
-   */
-  public static GlobalThreadStore getInstance() {
-    return ourInstance;
   }
 
   /**

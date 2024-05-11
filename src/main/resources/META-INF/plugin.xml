@@ -46,31 +46,7 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
         <toolWindow factoryClass="com.example.pssupporter.MyToolWindowFactory" id="BaekjoonSupporter"
                     doNotActivateOnStart="true" anchor="bottom" icon="/icons/pluginIcon.svg" canCloseContents="false"/>
     </extensions>
-    <actions>
-        <group id="myActionGroup">
-            <action id="myLoadTestDataAction" class="com.example.pssupporter.actions.MyLoadTestDataAction"
-                    text="Load test datas" description="Load test datas" icon="AllIcons.Actions.Find"/>
-            <action id="myAddTestAction" class="com.example.pssupporter.actions.MyAddTestAction"
-                    text="Add test data"
-                    description="Add test data" icon="AllIcons.General.Add"/>
-            <action id="myRemoveTestAction" class="com.example.pssupporter.actions.MyRemoveTestAction"
-                    text="Remove test data"
-                    description="Remove test data" icon="AllIcons.General.Remove"/>
-            <action id="myRunAllTestsAction" class="com.example.pssupporter.actions.MyRunAllTestsAction"
-                    text="Run All Tests"
-                    description="Run all tests" icon="AllIcons.Actions.RunAll">
-                <add-to-group group-id="ToolWindowContextMenu" anchor="first"/>
-                <add-to-group group-id="EditorPopupMenu.Run" anchor="first"/>
-            </action>
-            <action id="myRunTestAction" class="com.example.pssupporter.actions.MyRunTestAction"
-                    text="Run selected Test"
-                    description="Run selected test" icon="AllIcons.Actions.Execute"/>
-            <action id="myStopAllTestsAction" class="com.example.pssupporter.actions.MyStopAllTestsAction"
-                    text="Stop all running tests" description="Stop All Tests" icon="AllIcons.Actions.Suspend"/>
-        </group>
-    </actions>
 </idea-plugin>
