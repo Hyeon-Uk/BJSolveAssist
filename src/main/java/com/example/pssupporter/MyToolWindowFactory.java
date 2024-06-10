@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 public class MyToolWindowFactory implements ToolWindowFactory {
   private MyMainView myMainView;
@@ -46,7 +47,7 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     return new MyThreadStore();
   }
 
-  private void createActionGroup() {
+  private ActionGroup createActionGroup() {
     DefaultActionGroup myActionGroup = new DefaultActionGroup();
     myActionGroup.add(new MyLoadTestDataAction(myThreadStore));
     myActionGroup.add(new MyAddTestAction(myTestListPanel, myThreadStore));
@@ -58,15 +59,18 @@ public class MyToolWindowFactory implements ToolWindowFactory {
 
     ActionManager actionManager = ActionManager.getInstance();
     actionManager.registerAction("myActionGroup", myActionGroup);
+
+    return myActionGroup;
   }
 
-  private ActionGroup getActionGroup(String actionGroupId) {
+  private Optional<ActionGroup> getActionGroup(String actionGroupId) {
     ActionManager actionManager = ActionManager.getInstance();
-    return (ActionGroup) actionManager.getAction(actionGroupId);
+    return Optional.ofNullable((ActionGroup) actionManager.getAction(actionGroupId));
   }
 
   private MyToolbarPanel createToolbarPanel(JComponent targetComponent, String actionId) {
-    ActionGroup action = getActionGroup(actionId);
+    ActionGroup action = getActionGroup(actionId)
+            .orElseGet(this::createActionGroup);
     return new MyToolbarPanel(action, targetComponent);
   }
 
@@ -90,7 +94,6 @@ public class MyToolWindowFactory implements ToolWindowFactory {
       myMainView = new MyMainView(myTestListPanel, myEditorPanel, toolWindow.getAnchor().isHorizontal());
 
       myThreadStore = createThreadStore();
-      createActionGroup();
       myToolbarPanel = createToolbarPanel(myMainView, "myActionGroup");
 
       JBPanel totalView = new JBPanel(new BorderLayout());
