@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * This class will support you to maintain and run threads group easier
  */
-public class MyThreadStore {
+public class MyThreadStore implements ThreadStore {
   private final Map<ThreadGroupName, ThreadPoolExecutor> myThreadStore;
 
   public MyThreadStore() {
@@ -33,6 +33,7 @@ public class MyThreadStore {
    * @return ThreadPoolExecutor It defines in ThreadGroupName.
    * @throws IllegalArgumentException Throw error when the param is not a value defined in ThreadGroupName.
    */
+  @Override
   public synchronized ThreadPoolExecutor getThreadExecutorByName(@NotNull ThreadGroupName groupName) {
     ThreadPoolExecutor threadPoolExecutor = Optional.ofNullable(myThreadStore.get(groupName))
             .orElseThrow(() -> new IllegalArgumentException("Not Exist GroupName"));
@@ -53,6 +54,7 @@ public class MyThreadStore {
    * @param groupName Value of the ThreadGroup from which you want to run the thread
    * @param threads   Threads to run
    */
+  @Override
   public void executeThreads(@NotNull ThreadGroupName groupName, @NotNull Thread... threads) {
     ThreadPoolExecutor threadPoolExecutor = getThreadExecutorByName(groupName);
     for (Thread thread : threads) {
@@ -65,6 +67,7 @@ public class MyThreadStore {
    *
    * @param groupName Value of the ThreadGroup from which you want to interrupt the thread group.
    */
+  @Override
   public void interruptThreads(@NotNull ThreadGroupName groupName) {
     ThreadPoolExecutor threadPoolExecutor = getThreadExecutorByName(groupName);
     threadPoolExecutor.shutdownNow();
@@ -76,6 +79,7 @@ public class MyThreadStore {
    * @param groupName GroupName to see if there are running threads
    * @return True/false value for whether there are running threads in the thread group corresponding to the parameter
    */
+  @Override
   public boolean hasRunningThreads(@NotNull ThreadGroupName groupName) {
     return getThreadExecutorByName(groupName)
             .getActiveCount() > 0;
