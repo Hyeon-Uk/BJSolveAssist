@@ -46,6 +46,6 @@ public class JavaCodeRunner implements CodeRunner {
         process.destroy();
       }
     }
-    return new CodeRunnerDTO.Response(StringUtils.rTrim(output));
+    return new CodeRunnerDTO.Response(output);
   }
 }
