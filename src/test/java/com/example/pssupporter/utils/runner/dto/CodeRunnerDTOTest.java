@@ -18,9 +18,9 @@ class CodeRunnerDTOTest {
     @DisplayName("[Output]")
     class OutputTest {
       @Test
-      @DisplayName("Success : Output setting with removing carriage return character and last new line character")
+      @DisplayName("Success : Output setting with removing carriage return character, right blank and last new line character")
       void removeAllSpecialCharacter_Success() {
-        String str = "hello\r\nmy name\r\nis hyeon uk\n";
+        String str = "hello  \r\nmy name  \r\nis hyeon uk\n   ";
         String expected = "hello\nmy name\nis hyeon uk";
 
         CodeRunnerDTO.Response response = new CodeRunnerDTO.Response(str);

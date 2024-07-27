@@ -6,6 +6,9 @@ package com.example.pssupporter.utils.runner.dto;
 
 import com.example.pssupporter.utils.StringUtils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class CodeRunnerDTO {
   public static class Request {
     private String myInput;
@@ -32,7 +35,13 @@ public class CodeRunnerDTO {
     private String myOutput;
 
     public Response(String myOutput) {
-      this.myOutput = StringUtils.rTrim(StringUtils.removeCarriageReturn(myOutput));
+      String removedCarriageReturn = StringUtils.removeCarriageReturn(myOutput);
+      String[] lines = removedCarriageReturn.split("\n");
+
+      this.myOutput = Arrays.stream(lines)
+              .filter(line->!StringUtils.isBlank(line))
+              .map(StringUtils::rTrim)
+              .collect(Collectors.joining("\n"));
     }
 
     public String getOutput() {
