@@ -17,7 +17,10 @@ import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.main.MyMainView;
 import com.example.pssupporter.ui.toolbar.MyToolbarPanel;
+import com.example.pssupporter.utils.project.IntellijProjectService;
+import com.example.pssupporter.utils.project.ProjectService;
 import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
@@ -43,31 +46,38 @@ public class MyToolWindowFactory implements ToolWindowFactory {
   private TestListPanel myTestListPanel;
   private EditorPanel myEditorPanel;
   private MyToolbarPanel myToolbarPanel;
-  private MyThreadStore myThreadStore;
+  private ThreadStore myThreadStore;
+  private ProjectService myProjectService;
+
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
     ApplicationManager.getApplication().invokeLater(() -> {
-      initializeComponents(toolWindow);
+      initializeComponents(project, toolWindow);
       setupUI(toolWindow);
       setupToolWindowEventListener(project);
     });
   }
 
-  private void initializeComponents(ToolWindow toolWindow) {
+  private void initializeComponents(Project project, ToolWindow toolWindow) {
     myTestListPanel = createTestListPanel();
     myEditorPanel = createEditorPanel();
     myMainView = createMainView(toolWindow);
     myThreadStore = createThreadStore();
+    myProjectService = createProjectService(project);
     createActionGroup();
     myToolbarPanel = createToolbarPanel(myMainView, "myActionGroup");
+  }
+
+  private ProjectService createProjectService(Project project) {
+    return new IntellijProjectService(project);
   }
 
   private MyMainView createMainView(ToolWindow toolWindow) {
     return new MyMainView(myTestListPanel, myEditorPanel, toolWindow.getAnchor().isHorizontal());
   }
 
-  private MyThreadStore createThreadStore() {
+  private ThreadStore createThreadStore() {
     return new MyThreadStore();
   }
 
@@ -77,8 +87,8 @@ public class MyToolWindowFactory implements ToolWindowFactory {
     actionGroup.add(new MyAddTestAction(myTestListPanel, myThreadStore));
     actionGroup.add(new MyRemoveTestAction(myTestListPanel, myEditorPanel, myThreadStore));
     actionGroup.add(new MyRemoveAllTestAction(myTestListPanel, myEditorPanel, myThreadStore));
-    actionGroup.add(new MyRunAllTestsAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore));
-    actionGroup.add(new MyRunTestAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore));
+    actionGroup.add(new MyRunAllTestsAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore, myProjectService));
+    actionGroup.add(new MyRunTestAction(myTestListPanel, myEditorPanel, myMainView, myThreadStore, myProjectService));
     actionGroup.add(new MyStopAllTestsAction(myTestListPanel, myThreadStore));
 
     ActionManager.getInstance().registerAction("myActionGroup", actionGroup);

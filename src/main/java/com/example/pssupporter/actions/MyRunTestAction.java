@@ -8,12 +8,12 @@ import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.list.MyTestListItem;
 import com.example.pssupporter.ui.list.TestListPanel;
 import com.example.pssupporter.ui.main.MyMainView;
-import com.example.pssupporter.utils.IntellijUtils;
+import com.example.pssupporter.utils.project.ProjectService;
 import com.example.pssupporter.utils.runner.CodeRunner;
 import com.example.pssupporter.utils.runner.CodeRunnerProvider;
 import com.example.pssupporter.utils.runner.vo.CodeLanguage;
-import com.example.pssupporter.utils.thread.MyThreadStore;
 import com.example.pssupporter.utils.thread.TestRunningThread;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -21,20 +21,22 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class MyRunTestAction extends AnAction {
   private final TestListPanel myTestListPanel;
   private final EditorPanel myEditorPanel;
   private final MyMainView myMainView;
-  private final MyThreadStore myThreadStore;
+  private final ThreadStore myThreadStore;
+  private final ProjectService myProjectService;
 
-  public MyRunTestAction(TestListPanel myTestListPanel, EditorPanel myEditorPanel, MyMainView myMainView, MyThreadStore myThreadStore) {
+  public MyRunTestAction(TestListPanel myTestListPanel, EditorPanel myEditorPanel,
+                         MyMainView myMainView, ThreadStore myThreadStore,
+                         ProjectService myProjectService) {
     super("Run Test", "This action can run selected test", AllIcons.Actions.Execute);
     this.myTestListPanel = myTestListPanel;
     this.myEditorPanel = myEditorPanel;
     this.myMainView = myMainView;
     this.myThreadStore = myThreadStore;
+    this.myProjectService = myProjectService;
   }
 
   @Override
@@ -55,20 +57,19 @@ public class MyRunTestAction extends AnAction {
     }
 
     myMainView.saveAndClear();
-
     myEditorPanel.clearAll();
     myTestListPanel.clearSelection();
 
     MyTestListItem selectedItem = myTestListPanel.getMyTestList(selectedIndex);
-    IntellijUtils.getSelectedFile(Objects.requireNonNull(e.getProject()))
+    myProjectService.getSelectedFile()
             .ifPresentOrElse(selectedFile -> {
-                      IntellijUtils.autoSaveFile(selectedFile);
+              System.out.println("check");
+              myProjectService.saveFile();
 
-                      String path = selectedFile.getPath();
-                      CodeRunner codeRunner = CodeRunnerProvider.getCodeRunner(CodeLanguage.JAVA);
-                      TestRunningThread testRunningThread = new TestRunningThread(path, codeRunner, selectedItem);
-                      myThreadStore.executeThreads(ThreadGroupName.TEST_RUNNING, testRunningThread);
-                    }
-                    , () -> Messages.showMessageDialog("No selected file", "Run Test", AllIcons.Actions.Exit));
+              String path = selectedFile.getPath();
+              CodeRunner codeRunner = CodeRunnerProvider.getCodeRunner(CodeLanguage.JAVA);
+              TestRunningThread testRunningThread = new TestRunningThread(path, codeRunner, selectedItem);
+              myThreadStore.executeThreads(ThreadGroupName.TEST_RUNNING, testRunningThread);
+            }, () -> Messages.showMessageDialog("No selected file", "Run Test", AllIcons.Actions.Exit));
   }
 }

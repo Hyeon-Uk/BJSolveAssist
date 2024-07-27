@@ -4,129 +4,113 @@
 
 package com.example.pssupporter.actions;
 
+import com.example.pssupporter.fake.action.FakeProjectService;
+import com.example.pssupporter.fake.action.FakeThreadStore;
 import com.example.pssupporter.ui.editor.EditorPanel;
-import com.example.pssupporter.ui.list.MyTestListItem;
+import com.example.pssupporter.ui.editor.MyEditorPanel;
+import com.example.pssupporter.ui.editor.panel.InputEditorPanel;
+import com.example.pssupporter.ui.editor.panel.OutputEditorPanel;
+import com.example.pssupporter.ui.editor.panel.ResultEditorPanel;
+import com.example.pssupporter.ui.fake.FakeInputEditorPanel;
+import com.example.pssupporter.ui.fake.FakeOutputEditorPanel;
+import com.example.pssupporter.ui.fake.FakeResultEditorPanel;
+import com.example.pssupporter.ui.fake.FakeSubTestList;
+import com.example.pssupporter.ui.list.MyTestListPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
+import com.example.pssupporter.ui.list.panel.SubTestList;
 import com.example.pssupporter.ui.main.MyMainView;
-import com.example.pssupporter.utils.IntellijUtils;
-import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.project.ProjectService;
+import com.example.pssupporter.utils.project.vo.CustomFile;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
-import com.example.pssupporter.vo.TestData;
-import com.intellij.mock.MockVirtualFile;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import org.junit.jupiter.api.*;
+import com.intellij.testFramework.TestActionEvent;
+import com.intellij.ui.AnActionButton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class MyRunAllTestsActionTest {
-  @Mock
-  private TestListPanel mockTestListPanel;
-  @Mock
-  private EditorPanel mockEditorPanel;
-  @Mock
-  private MyMainView mockMainView;
-  @Mock
-  private MyThreadStore mockThreadStore;
-  @Mock
-  private Presentation presentation;
+  private InputEditorPanel mockInputEditorPanel = new FakeInputEditorPanel();
+  private OutputEditorPanel mockOutputEditorPanel = new FakeOutputEditorPanel();
+  private ResultEditorPanel mockResultEditorPanel = new FakeResultEditorPanel();
+  private SubTestList mockSubTestList = new FakeSubTestList();
+  private TestListPanel mockTestListPanel = new MyTestListPanel(mockSubTestList, e -> {
+
+  });
+  private EditorPanel mockEditorPanel = new MyEditorPanel(mockInputEditorPanel, mockOutputEditorPanel, mockResultEditorPanel);
+  private MyMainView mockMainView = new MyMainView(mockTestListPanel, mockEditorPanel, true);
+  private Map<ThreadGroupName, List<Thread>> threadContainer = new HashMap<>();
+  private ThreadStore mockThreadStore = new FakeThreadStore(threadContainer);
+  private CustomFile mockFile = new CustomFile("customFilePath", "customFileName");
+  private ProjectService mockProjectService = new FakeProjectService(mockFile, true);
+  private MyRunAllTestsAction runAllTestsAction = new MyRunAllTestsAction(mockTestListPanel, mockEditorPanel, mockMainView, mockThreadStore, mockProjectService);
+
+  private Presentation presentation = new Presentation("mock");
   @Mock
   private AnActionEvent mockAnActionEvent;
-  @Mock
-  private Project mockProject;
-
-  @InjectMocks
-  private MyRunAllTestsAction runAllTestsAction;
 
   @Nested
   @DisplayName("[UpdateTest]")
   class UpdateTest {
-    boolean isEnabled;
+
 
     @BeforeEach
     void init() {
       when(mockAnActionEvent.getPresentation())
               .thenReturn(presentation);
-      doAnswer(invocation -> {
-        Boolean argument = invocation.getArgument(0, Boolean.class);
-        isEnabled = argument;
-        return isEnabled;
-      }).when(presentation).setEnabled(anyBoolean());
     }
 
     @Test
     void disableWhenRunningThreadsExist() {
       //given
-      when(mockThreadStore.hasRunningThreads(any(ThreadGroupName.class))).thenReturn(true);
+      threadContainer.put(ThreadGroupName.TEST_RUNNING, List.of(new Thread()));
 
       //when
       runAllTestsAction.update(mockAnActionEvent);
 
       //then
-      assertFalse(isEnabled);
+      assertFalse(mockAnActionEvent.getPresentation().isEnabled());
     }
 
     @Test
     void enableWhenRunningThreadsNotExist() {
       //given
-      when(mockThreadStore.hasRunningThreads(any(ThreadGroupName.class))).thenReturn(false);
 
       //when
       runAllTestsAction.update(mockAnActionEvent);
 
       //then
-      assertTrue(isEnabled);
+      assertTrue(mockAnActionEvent.getPresentation().isEnabled());
     }
   }
 
   @Nested
   @DisplayName("[ActionPerformed]")
   class ActionPerformedTest {
-    MockedStatic<IntellijUtils> mockIntellijUtils;
-    VirtualFile mockFile = new MockVirtualFile("mockFile");
-    Map<ThreadGroupName, List<Thread>> threadContainer = new HashMap<>();
-
-    @BeforeEach
-    void init() {
-      mockIntellijUtils = mockStatic(IntellijUtils.class);
-
-    }
-
-    @AfterEach
-    void close() {
-      mockIntellijUtils.close();
-    }
 
     @Test
     void runOneTest() {
       //given
-      when(IntellijUtils.getSelectedFile(any()))
-              .thenReturn(Optional.ofNullable(mockFile));
-      when(mockAnActionEvent.getProject())
-              .thenReturn(mockProject);
-      doAnswer(invocation -> {
-        ThreadGroupName threadGroupName = invocation.getArgument(0, ThreadGroupName.class);
-        Thread threads = invocation.getArgument(1, Thread.class);
-        List<Thread> list = threadContainer.getOrDefault(threadGroupName, new ArrayList<>());
-        list.add(threads);
-        threadContainer.put(threadGroupName, list);
-        return null;
-      }).when(mockThreadStore).executeThreads(any(ThreadGroupName.class), any(Thread.class));
-      when(mockTestListPanel.getMyTestListItems())
-              .thenReturn(List.of(new MyTestListItem(new TestData())));
+      mockSubTestList.addTest();
 
       //when
       runAllTestsAction.actionPerformed(mockAnActionEvent);
@@ -138,25 +122,9 @@ public class MyRunAllTestsActionTest {
     @Test
     void runManyTests() {
       //given
-      when(IntellijUtils.getSelectedFile(any()))
-              .thenReturn(Optional.ofNullable(mockFile));
-      when(mockAnActionEvent.getProject())
-              .thenReturn(mockProject);
-      Map<ThreadGroupName, List<Thread>> threadContainer = new HashMap<>();
-      doAnswer(invocation -> {
-        ThreadGroupName threadGroupName = invocation.getArgument(0, ThreadGroupName.class);
-        Thread threads1 = invocation.getArgument(1, Thread.class);
-        Thread threads2 = invocation.getArgument(2, Thread.class);
-        Thread threads3 = invocation.getArgument(2, Thread.class);
-        List<Thread> list = threadContainer.getOrDefault(threadGroupName, new ArrayList<>());
-        list.add(threads1);
-        list.add(threads2);
-        list.add(threads3);
-        threadContainer.put(threadGroupName, list);
-        return null;
-      }).when(mockThreadStore).executeThreads(any(ThreadGroupName.class), any(Thread.class), any(Thread.class), any(Thread.class));
-      when(mockTestListPanel.getMyTestListItems())
-              .thenReturn(List.of(new MyTestListItem(new TestData()), new MyTestListItem(new TestData()), new MyTestListItem(new TestData())));
+      mockSubTestList.addTest();
+      mockSubTestList.addTest();
+      mockSubTestList.addTest();
 
       //when
       runAllTestsAction.actionPerformed(mockAnActionEvent);

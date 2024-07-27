@@ -5,7 +5,7 @@
 package com.example.pssupporter.actions;
 
 import com.example.pssupporter.ui.list.TestListPanel;
-import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class MyAddTestAction extends AnAction {
   private final TestListPanel myTestListPanel;
-  private final MyThreadStore myThreadStore;
+  private final ThreadStore myThreadStore;
 
-  public MyAddTestAction(TestListPanel myTestListPanel, MyThreadStore myThreadStore) {
+  public MyAddTestAction(TestListPanel myTestListPanel, ThreadStore myThreadStore) {
     super("Add Test Data", "This action can add Test", AllIcons.General.Add);
     this.myTestListPanel = myTestListPanel;
     this.myThreadStore = myThreadStore;

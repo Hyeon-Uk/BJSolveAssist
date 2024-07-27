@@ -4,7 +4,7 @@
 
 package com.example.pssupporter.actions;
 
-import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -13,9 +13,9 @@ import com.intellij.openapi.ui.Messages;
 import org.jetbrains.annotations.NotNull;
 
 public class MyLoadTestDataAction extends AnAction {
-  private final MyThreadStore myThreadStore;
+  private final ThreadStore myThreadStore;
 
-  public MyLoadTestDataAction(MyThreadStore myThreadStore) {
+  public MyLoadTestDataAction(ThreadStore myThreadStore) {
     super("Load Test DataSets", "This action can load test data sets", AllIcons.Actions.Find);
     this.myThreadStore = myThreadStore;
   }

@@ -5,7 +5,7 @@
 package com.example.pssupporter.actions;
 
 import com.example.pssupporter.ui.list.TestListPanel;
-import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class MyStopAllTestsAction extends AnAction {
   private final TestListPanel myTestListPanel;
-  private final MyThreadStore myThreadStore;
+  private final ThreadStore myThreadStore;
 
-  public MyStopAllTestsAction(TestListPanel myTestListPanel, MyThreadStore myThreadStore) {
+  public MyStopAllTestsAction(TestListPanel myTestListPanel, ThreadStore myThreadStore) {
     super("Stop All Running Tests", "This action can stop all tests", AllIcons.Actions.Suspend);
     this.myTestListPanel = myTestListPanel;
     this.myThreadStore = myThreadStore;

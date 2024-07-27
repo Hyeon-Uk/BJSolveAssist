@@ -6,7 +6,7 @@ package com.example.pssupporter.actions;
 
 import com.example.pssupporter.ui.editor.EditorPanel;
 import com.example.pssupporter.ui.list.TestListPanel;
-import com.example.pssupporter.utils.thread.MyThreadStore;
+import com.example.pssupporter.utils.thread.ThreadStore;
 import com.example.pssupporter.utils.thread.vo.ThreadGroupName;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 public class MyRemoveTestAction extends AnAction {
   private final TestListPanel myTestListPanel;
   private final EditorPanel myEditorPanel;
-  private final MyThreadStore myThreadStore;
+  private final ThreadStore myThreadStore;
 
-  public MyRemoveTestAction(TestListPanel myTestListPanel, EditorPanel myEditorPanel, MyThreadStore myThreadStore) {
+  public MyRemoveTestAction(TestListPanel myTestListPanel, EditorPanel myEditorPanel, ThreadStore myThreadStore) {
     super("Remove Test Data Set", "This action can remove test data set", AllIcons.General.Remove);
     this.myTestListPanel = myTestListPanel;
     this.myEditorPanel = myEditorPanel;
